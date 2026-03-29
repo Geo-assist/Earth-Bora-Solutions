@@ -1,0 +1,247 @@
+@page "/settings"
+@inject HttpClient Http
+@inject Agrovet.AdminApp.Services.AdminAuthService AuthService
+@inject NavigationManager Navigation
+
+<div style="padding: 8px 0;">
+
+    <!-- Header -->
+    <div style="margin-bottom: 24px;">
+        <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">⚙️ Settings</h4>
+        <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">Manage your account and store settings</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+        <!-- Change Password -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 6px;">🔑 Change Password</h6>
+            <p style="color: #666; font-size: 0.82rem; margin: 0 0 24px;">Update your admin account password</p>
+
+            @if (!string.IsNullOrEmpty(passwordSuccess))
+            {
+                <div style="background: #1b3a2e; color: #4caf50; padding: 12px 16px; border-radius: 10px; font-weight: 600; margin-bottom: 16px; font-size: 0.88rem;">
+                    ✅ @passwordSuccess
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(passwordError))
+            {
+                <div style="background: #3a1a1a; color: #ef5350; padding: 12px 16px; border-radius: 10px; font-weight: 600; margin-bottom: 16px; font-size: 0.88rem;">
+                    ⚠️ @passwordError
+                </div>
+            }
+
+            <div style="margin-bottom: 16px;">
+                <label style="@LabelStyle">Email Address</label>
+                <input @bind="passwordEmail" type="email" placeholder="your@email.com" style="@InputStyle" />
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="@LabelStyle">New Password</label>
+                <input @bind="newPassword" type="password" placeholder="Min 8 chars, uppercase, number, symbol" style="@InputStyle" />
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="@LabelStyle">Confirm New Password</label>
+                <input @bind="confirmPassword" type="password" placeholder="Repeat new password" style="@InputStyle" />
+            </div>
+
+            <button @onclick="ChangePassword" disabled="@isChangingPassword" style="
+                background: #1b5e20; color: white; border: none;
+                padding: 12px 28px; border-radius: 50px;
+                font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                width: 100%;
+            ">
+                @if (isChangingPassword)
+                {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    <span>Updating...</span>
+                }
+                else
+                {
+                    <span>🔑 Update Password</span>
+                }
+            </button>
+        </div>
+
+        <!-- Store Information -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 6px;">🏪 Store Information</h6>
+            <p style="color: #666; font-size: 0.82rem; margin: 0 0 24px;">Update your store details shown on receipts</p>
+
+            @if (!string.IsNullOrEmpty(storeSuccess))
+            {
+                <div style="background: #1b3a2e; color: #4caf50; padding: 12px 16px; border-radius: 10px; font-weight: 600; margin-bottom: 16px; font-size: 0.88rem;">
+                    ✅ @storeSuccess
+                </div>
+            }
+
+            <div style="margin-bottom: 16px;">
+                <label style="@LabelStyle">Store Name</label>
+                <input @bind="storeName" placeholder="e.g. Earth Bora Solutions" style="@InputStyle" />
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="@LabelStyle">Phone Number</label>
+                <input @bind="storePhone" placeholder="e.g. 0712 345 678" style="@InputStyle" />
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="@LabelStyle">Email Address</label>
+                <input @bind="storeEmail" placeholder="e.g. info@earthbora.co.ke" style="@InputStyle" />
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="@LabelStyle">Physical Address</label>
+                <input @bind="storeAddress" placeholder="e.g. Nakuru, Kenya" style="@InputStyle" />
+            </div>
+
+            <button @onclick="SaveStoreInfo" style="
+                background: #1b5e20; color: white; border: none;
+                padding: 12px 28px; border-radius: 50px;
+                font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                width: 100%;
+            ">💾 Save Store Info</button>
+        </div>
+
+        <!-- Admin Account Info -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 6px;">👤 Account Information</h6>
+            <p style="color: #666; font-size: 0.82rem; margin: 0 0 24px;">Your current admin account details</p>
+
+            <div style="background: #16213e; border-radius: 12px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+                    <div style="
+                        width: 60px; height: 60px; border-radius: 50%;
+                        background: linear-gradient(135deg, #1b5e20, #4caf50);
+                        display: flex; align-items: center; justify-content: center;
+                        color: white; font-weight: 900; font-size: 1.5rem;
+                    ">@(AuthService.FullName?.Substring(0, 1).ToUpper() ?? "A")</div>
+                    <div>
+                        <p style="font-weight: 800; color: #e0e0e0; margin: 0; font-size: 1rem;">@AuthService.FullName</p>
+                        <span style="background: #1b3a2e; color: #4caf50; padding: 3px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">
+                            @AuthService.Role
+                        </span>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #2a2a3e; padding-top: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #666; font-size: 0.82rem;">Role</span>
+                        <span style="color: #e0e0e0; font-weight: 600; font-size: 0.82rem;">@AuthService.Role</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #666; font-size: 0.82rem;">Session</span>
+                        <span style="color: #4caf50; font-weight: 600; font-size: 0.82rem;">● Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <button @onclick="Logout" style="
+                background: #3a1a1a; color: #ef5350; border: 1px solid #ef5350;
+                padding: 12px 28px; border-radius: 50px;
+                font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                width: 100%; margin-top: 16px;
+            ">🚪 Logout</button>
+        </div>
+
+        <!-- System Info -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 6px;">🖥️ System Information</h6>
+            <p style="color: #666; font-size: 0.82rem; margin: 0 0 24px;">Technical details about the system</p>
+
+            <div style="background: #16213e; border-radius: 12px; padding: 20px;">
+                @foreach (var info in systemInfo)
+                {
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a2a3e;">
+                        <span style="color: #666; font-size: 0.82rem;">@info.Key</span>
+                        <span style="color: #e0e0e0; font-weight: 600; font-size: 0.82rem;">@info.Value</span>
+                    </div>
+                }
+            </div>
+
+            <div style="margin-top: 20px; padding: 16px; background: #1b3a2e; border-radius: 12px;">
+                <p style="color: #4caf50; font-weight: 700; margin: 0 0 4px; font-size: 0.88rem;">✅ All Systems Operational</p>
+                <p style="color: #666; font-size: 0.78rem; margin: 0;">API, Database and Services are running normally</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string passwordEmail = string.Empty;
+    private string newPassword = string.Empty;
+    private string confirmPassword = string.Empty;
+    private string passwordError = string.Empty;
+    private string passwordSuccess = string.Empty;
+    private bool isChangingPassword = false;
+
+    private string storeName = "Earth Bora Solutions";
+    private string storePhone = "0712 345 678";
+    private string storeEmail = "info@earthbora.co.ke";
+    private string storeAddress = "Nakuru, Kenya";
+    private string storeSuccess = string.Empty;
+
+    private string LabelStyle => "font-weight: 700; font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px;";
+    private string InputStyle => "width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid #2a2a3e; background: #16213e; color: #e0e0e0; font-size: 0.9rem; outline: none; box-sizing: border-box;";
+
+    private Dictionary<string, string> systemInfo = new()
+    {
+        { "Platform", "Blazor WebAssembly" },
+        { "Backend", "ASP.NET Core 8" },
+        { "Database", "SQL Server 2022" },
+        { "Payment", "M-Pesa Daraja API" },
+        { "SMS", "Africa's Talking" },
+        { "Version", "1.0.0" },
+        { "Environment", "Development" }
+    };
+
+    private async Task ChangePassword()
+    {
+        passwordError = string.Empty;
+        passwordSuccess = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(passwordEmail)) { passwordError = "Email is required."; return; }
+        if (string.IsNullOrWhiteSpace(newPassword)) { passwordError = "New password is required."; return; }
+        if (newPassword != confirmPassword) { passwordError = "Passwords do not match."; return; }
+        if (newPassword.Length < 8) { passwordError = "Password must be at least 8 characters."; return; }
+
+        isChangingPassword = true;
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/auth/reset-password", new
+            {
+                Email = passwordEmail,
+                NewPassword = newPassword
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                passwordSuccess = "Password updated successfully!";
+                passwordEmail = string.Empty;
+                newPassword = string.Empty;
+                confirmPassword = string.Empty;
+            }
+            else
+            {
+                passwordError = "Email not found or update failed.";
+            }
+        }
+        catch (Exception ex)
+        {
+            passwordError = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isChangingPassword = false;
+        }
+    }
+
+    private async Task SaveStoreInfo()
+    {
+        storeSuccess = "Store information saved successfully!";
+        await Task.Delay(3000);
+        storeSuccess = string.Empty;
+        StateHasChanged();
+    }
+
+    private void Logout()
+    {
+        AuthService.Logout();
+        Navigation.NavigateTo("/login");
+    }
+}

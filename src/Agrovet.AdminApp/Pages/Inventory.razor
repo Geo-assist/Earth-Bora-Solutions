@@ -1,0 +1,255 @@
+@page "/inventory"
+@inject HttpClient Http
+
+<div style="padding: 8px 0;">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">📦 Inventory Management</h4>
+            <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">Monitor stock levels across all products</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <input
+                @oninput="OnSearch"
+                placeholder="🔍 Search products..."
+                style="
+                    padding: 10px 18px; border: 1px solid #e0e0e0;
+                    border-radius: 50px; width: 220px; font-size: 0.88rem;
+                    outline: none; background: #1e1e2e;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                "
+            />
+            <button @onclick="@(() => Navigate("/manage-products"))" style="
+                background: #1b5e20; color: white; border: none;
+                padding: 10px 20px; border-radius: 50px;
+                font-weight: 700; cursor: pointer; font-size: 0.88rem;
+            ">+ Add Product</button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Total Products</p>
+            <h3 style="font-weight: 900; color: #e0e0e0; margin: 0;">@(products?.Count ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">In Stock</p>
+            <h3 style="font-weight: 900; color: #1b5e20; margin: 0;">@(products?.Count(p => p.StockQuantity > p.LowStockThreshold) ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Low Stock</p>
+            <h3 style="font-weight: 900; color: #e65100; margin: 0;">@(products?.Count(p => p.StockQuantity <= p.LowStockThreshold && p.StockQuantity > 0) ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Out of Stock</p>
+            <h3 style="font-weight: 900; color: #c62828; margin: 0;">@(products?.Count(p => p.StockQuantity == 0) ?? 0)</h3>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+        @foreach (var tab in new[] { "All", "In Stock", "Low Stock", "Out of Stock" })
+        {
+            <button @onclick="@(() => SetFilter(tab))" style="
+                padding: 8px 18px; border-radius: 50px; cursor: pointer;
+                font-size: 0.82rem; font-weight: 700; border: none;
+                background: @(activeFilter == tab ? "#1b5e20" : "white");
+                color: @(activeFilter == tab ? "white" : "#666");
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            ">@tab</button>
+        }
+    </div>
+
+    <!-- Table -->
+    <div style="background: #1e1e2e; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;">
+        @if (isLoading)
+        {
+            <div style="text-align: center; padding: 60px;">
+                <div class="spinner-border text-success"></div>
+                <p class="mt-3 text-muted">Loading inventory...</p>
+            </div>
+        }
+        else if (filteredProducts.Count == 0)
+        {
+            <div style="text-align: center; padding: 60px; color: #666;">
+                <div style="font-size: 3rem;">📦</div>
+                <h5 style="margin-top: 12px;">No products found</h5>
+            </div>
+        }
+        else
+        {
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #16213e; border-bottom: 2px solid #e8eaf0;">
+                        <th style="@ThStyle">#</th>
+                        <th style="@ThStyle">Product Name</th>
+                        <th style="@ThStyle">SKU</th>
+                        <th style="@ThStyle">Price</th>
+                        <th style="@ThStyle">Stock Qty</th>
+                        <th style="@ThStyle">Threshold</th>
+                        <th style="@ThStyle">Stock Level</th>
+                        <th style="@ThStyle">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int index = 1; }
+                    @foreach (var product in filteredProducts)
+                    {
+                        <tr style="border-bottom: 1px solid #2a2a3e;"
+                            onmouseover="this.style.background='#f8fffe'"
+                            onmouseout="this.style.background='white'">
+                            <td style="@TdStyle color: #666; font-weight: 600;">@index</td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 700; color: #e0e0e0;">@product.Name</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-family: monospace; color: #666; font-size: 0.82rem;">@product.SKU</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 800; color: #1b5e20;">KSh @product.Price</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 800; font-size: 1rem; color: @GetQtyColor(product);">
+                                    @product.StockQuantity
+                                </span>
+                            </td>
+                            <td style="@TdStyle color: #666;">@product.LowStockThreshold</td>
+                            <td style="@TdStyle">
+                                <!-- Stock level bar -->
+                                <div style="width: 100px; background: #f0f0f0; border-radius: 50px; height: 8px; overflow: hidden;">
+                                    <div style="
+                                        width: @GetStockPercent(product)%;
+                                        background: @GetBarColor(product);
+                                        height: 100%; border-radius: 50px;
+                                        transition: width 0.3s;
+                                    "></div>
+                                </div>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="
+                                    padding: 5px 14px; border-radius: 50px;
+                                    font-size: 0.75rem; font-weight: 700;
+                                    background: @GetStatusBg(product);
+                                    color: @GetStatusColor(product);
+                                ">@GetStatusText(product)</span>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+
+            <div style="padding: 16px 24px; background: #16213e;">
+                <p style="margin: 0; color: #666; font-size: 0.85rem;">
+                    Showing @filteredProducts.Count of @(products?.Count ?? 0) products
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ProductDto>? products;
+    private List<ProductDto> filteredProducts = new();
+    private bool isLoading = true;
+    private string activeFilter = "All";
+    private string searchQuery = string.Empty;
+
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private string ThStyle => "padding: 14px 20px; text-align: left; font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px;";
+    private string TdStyle => "padding: 14px 20px; font-size: 0.88rem;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadInventory();
+    }
+
+    private async Task LoadInventory()
+    {
+        isLoading = true;
+        try
+        {
+            products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products") ?? new();
+            ApplyFilters();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            products = new();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void OnSearch(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString()?.ToLower() ?? string.Empty;
+        ApplyFilters();
+    }
+
+    private void SetFilter(string filter)
+    {
+        activeFilter = filter;
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        var list = products ?? new();
+
+        if (!string.IsNullOrEmpty(searchQuery))
+            list = list.Where(p => p.Name.ToLower().Contains(searchQuery) || p.SKU.ToLower().Contains(searchQuery)).ToList();
+
+        filteredProducts = activeFilter switch
+        {
+            "In Stock" => list.Where(p => p.StockQuantity > p.LowStockThreshold).ToList(),
+            "Low Stock" => list.Where(p => p.StockQuantity <= p.LowStockThreshold && p.StockQuantity > 0).ToList(),
+            "Out of Stock" => list.Where(p => p.StockQuantity == 0).ToList(),
+            _ => list
+        };
+    }
+
+    private void Navigate(string url) => Navigation.NavigateTo(url);
+
+    private string GetStatusText(ProductDto p) =>
+        p.StockQuantity == 0 ? "Out of Stock" :
+        p.StockQuantity <= p.LowStockThreshold ? "Low Stock" : "In Stock";
+
+    private string GetStatusBg(ProductDto p) =>
+        p.StockQuantity == 0 ? "#ffebee" :
+        p.StockQuantity <= p.LowStockThreshold ? "#fff3e0" : "#e8f5e9";
+
+    private string GetStatusColor(ProductDto p) =>
+        p.StockQuantity == 0 ? "#c62828" :
+        p.StockQuantity <= p.LowStockThreshold ? "#e65100" : "#2e7d32";
+
+    private string GetQtyColor(ProductDto p) =>
+        p.StockQuantity == 0 ? "#c62828" :
+        p.StockQuantity <= p.LowStockThreshold ? "#e65100" : "#1b5e20";
+
+    private string GetBarColor(ProductDto p) =>
+        p.StockQuantity == 0 ? "#ef5350" :
+        p.StockQuantity <= p.LowStockThreshold ? "#ffa726" : "#4caf50";
+
+    private int GetStockPercent(ProductDto p)
+    {
+        if (p.LowStockThreshold == 0) return 100;
+        var percent = (int)((double)p.StockQuantity / (p.LowStockThreshold * 3) * 100);
+        return Math.Min(percent, 100);
+    }
+
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string SKU { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public int StockQuantity { get; set; }
+        public int LowStockThreshold { get; set; }
+    }
+}

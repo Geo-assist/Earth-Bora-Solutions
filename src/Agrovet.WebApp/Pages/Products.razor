@@ -1,0 +1,406 @@
+@page "/products"
+@inject Agrovet.WebApp.Services.AuthStateService AuthState
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@if (!string.IsNullOrEmpty(addedMessage))
+{
+    <div style="
+        position: fixed; top: 80px; right: 24px; z-index: 9999;
+        background: #1b5e20; color: white;
+        padding: 14px 28px; border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        font-weight: 600; font-size: 0.95rem;
+        animation: fadeIn 0.3s ease;
+    ">✅ @addedMessage</div>
+}
+
+<div style="display: flex; min-height: calc(100vh - 65px); background: #f5f6fa;">
+
+    <!-- Category Sidebar -->
+    <div style="
+        width: 240px; min-width: 240px;
+        background: white;
+        border-right: 1px solid #e8eaf0;
+        padding: 24px 0;
+    ">
+        <div style="padding: 0 20px 16px;">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin: 0;">
+                Categories
+            </p>
+        </div>
+
+        <div style="padding: 0 12px;">
+            <button @onclick="@(() => SelectCategory(null, null))" style="@GetCatStyle(selectedCategory == null)">
+                <span>🏪</span> All Products
+            </button>
+
+            <!-- Animal Products -->
+            <button @onclick="ToggleAnimal" style="@GetCatStyle(selectedMainCategory == "animal")">
+                <span>🐄</span> Animal Products
+                <span style="margin-left: auto;">@(showAnimalSub ? "▲" : "▼")</span>
+            </button>
+            @if (showAnimalSub)
+            {
+                <div style="margin-left: 8px; border-left: 2px solid #e8f5e9; padding-left: 8px;">
+                    @foreach (var animal in animalCategories)
+                    {
+                        <button @onclick="@(() => SelectCategory(animal.Key, animal.Value))" style="@GetSubCatStyle(selectedCategory == animal.Key)">
+                            @animal.Value
+                        </button>
+                    }
+                </div>
+            }
+
+            <!-- Crop Products -->
+            <button @onclick="ToggleCrops" style="@GetCatStyle(selectedMainCategory == "crops")">
+                <span>🌾</span> Crop Products
+                <span style="margin-left: auto;">@(showCropSub ? "▲" : "▼")</span>
+            </button>
+            @if (showCropSub)
+            {
+                <div style="margin-left: 8px; border-left: 2px solid #e8f5e9; padding-left: 8px;">
+                    @foreach (var crop in cropCategories)
+                    {
+                        <button @onclick="@(() => SelectCategory(crop.Key, crop.Value))" style="@GetSubCatStyle(selectedCategory == crop.Key)">
+                            @crop.Value
+                        </button>
+                    }
+                </div>
+            }
+
+            <button @onclick="@(() => SelectCategory("tools", "🔧 Farm Tools"))" style="@GetCatStyle(selectedCategory == "tools")">
+                <span>🔧</span> Farm Tools
+            </button>
+
+            <button @onclick="@(() => SelectCategory("vet", "💊 Veterinary"))" style="@GetCatStyle(selectedCategory == "vet")">
+                <span>💊</span> Veterinary
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex: 1; padding: 28px;">
+
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;">
+            <div>
+                <h4 style="font-weight: 900; margin: 0; color: #1a1a2e; font-size: 1.5rem;">
+                    @(selectedCategoryName ?? "All Products")
+                </h4>
+                <p style="color: #999; font-size: 0.85rem; margin: 4px 0 0;">
+                    @filteredProducts.Count items available
+                </p>
+            </div>
+            <div style="position: relative;">
+                <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999;">🔍</span>
+                <input
+                    @oninput="OnSearch"
+                    placeholder="Search products..."
+                    style="
+                        padding: 11px 16px 11px 40px;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 50px;
+                        width: 260px;
+                        font-size: 0.9rem;
+                        outline: none;
+                        background: white;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                    "
+                />
+            </div>
+        </div>
+
+        @if (isLoading)
+        {
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+                @for (int i = 0; i < 6; i++)
+                {
+                    <div style="
+                        background: white; border-radius: 16px; overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.06); height: 320px;
+                        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                        background-size: 200% 100%;
+                    "></div>
+                }
+            </div>
+        }
+        else if (filteredProducts.Count == 0)
+        {
+            <div style="text-align: center; padding: 80px 20px;">
+                <div style="font-size: 4rem;">🌱</div>
+                <h5 style="color: #999; margin-top: 16px;">No products found</h5>
+                <p style="color: #bbb;">Try a different category or search term</p>
+            </div>
+        }
+        else
+        {
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+                @foreach (var product in filteredProducts)
+                {
+                    <div style="
+                        background: white;
+                        border-radius: 16px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+                        transition: transform 0.2s, box-shadow 0.2s;
+                        cursor: pointer;
+                    "
+                    onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 25px rgba(0,0,0,0.12)'"
+                    onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'">
+
+                        <!-- Product Image -->
+                        <div style="height: 200px; overflow: hidden; position: relative; background: #e8f5e9;">
+                            <img
+                                src="@GetProductImage(product.Name)"
+                                alt="@product.Name"
+                                style="width: 100%; height: 100%; object-fit: cover;"
+                                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80'"
+                            />
+                            <!-- Stock Badge -->
+                            <div style="
+                                position: absolute; top: 12px; right: 12px;
+                                padding: 4px 10px; border-radius: 50px;
+                                font-size: 0.72rem; font-weight: 700;
+                                background: @(product.StockQuantity > product.LowStockThreshold ? "rgba(46,125,50,0.9)" : "rgba(198,40,40,0.9)");
+                                color: white;
+                                backdrop-filter: blur(4px);
+                            ">
+                                @(product.StockQuantity > product.LowStockThreshold ? "In Stock" : "Low Stock")
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div style="padding: 16px;">
+                            <h6 style="font-weight: 800; margin: 0 0 4px; color: #1a1a2e; font-size: 0.95rem;">@product.Name</h6>
+                            <p style="font-size: 0.8rem; color: #999; margin: 0 0 12px; line-height: 1.5;">
+                                @(product.Description.Length > 55 ? product.Description.Substring(0, 55) + "..." : product.Description)
+                            </p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 1.15rem; font-weight: 900; color: #1b5e20;">
+                                    KSh @product.Price
+                                </span>
+                                <button @onclick="@(async () => await AddToCart(product))" style="
+                                    background: #1b5e20;
+                                    color: white;
+                                    border: none;
+                                    padding: 8px 18px;
+                                    border-radius: 50px;
+                                    font-weight: 700;
+                                    cursor: pointer;
+                                    font-size: 0.85rem;
+                                    transition: background 0.2s;
+                                "
+                                onmouseover="this.style.background='#2e7d32'"
+                                onmouseout="this.style.background='#1b5e20'">
+                                    + Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ProductDto> allProducts = new();
+    private List<ProductDto> filteredProducts = new();
+    private bool isLoading = true;
+    private string? selectedCategory = null;
+    private string? selectedCategoryName = null;
+    private string? selectedMainCategory = null;
+    private string searchQuery = string.Empty;
+    private bool showAnimalSub = false;
+    private bool showCropSub = false;
+    private string addedMessage = string.Empty;
+
+    private Dictionary<string, string> animalCategories = new()
+    {
+        { "cattle", "🐄 Cattle" },
+        { "goats", "🐐 Goats" },
+        { "poultry", "🐔 Poultry" },
+        { "pigs", "🐷 Pigs" },
+        { "rabbits", "🐇 Rabbits" },
+        { "fish", "🐟 Fish Farming" }
+    };
+
+    private Dictionary<string, string> cropCategories = new()
+    {
+        { "pesticides", "🧴 Pesticides" },
+        { "fertilizers", "🌱 Fertilizers" },
+        { "seeds", "🌾 Seeds" },
+        { "herbicides", "🍃 Herbicides" }
+    };
+
+    private string GetCatStyle(bool active) =>
+        $"width: 100%; text-align: left; padding: 10px 14px; border: none; border-radius: 10px; " +
+        $"background: {(active ? "#e8f5e9" : "transparent")}; " +
+        $"color: {(active ? "#1b5e20" : "#444")}; " +
+        $"font-weight: {(active ? "700" : "500")}; " +
+        $"cursor: pointer; font-size: 0.88rem; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;";
+
+    private string GetSubCatStyle(bool active) =>
+        $"width: 100%; text-align: left; padding: 8px 12px; border: none; border-radius: 8px; " +
+        $"background: {(active ? "#c8e6c9" : "transparent")}; " +
+        $"color: {(active ? "#1b5e20" : "#666")}; " +
+        $"font-weight: {(active ? "700" : "400")}; " +
+        $"cursor: pointer; font-size: 0.85rem; margin-bottom: 2px;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthState.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+        await LoadProducts();
+    }
+
+    private async Task LoadProducts()
+    {
+        isLoading = true;
+        try
+        {
+            allProducts = await Http.GetFromJsonAsync<List<ProductDto>>("api/products") ?? new();
+            FilterProducts();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void FilterProducts()
+    {
+        var query = searchQuery.ToLower();
+        filteredProducts = allProducts.Where(p =>
+            (string.IsNullOrEmpty(query) ||
+             p.Name.ToLower().Contains(query) ||
+             p.Description.ToLower().Contains(query)) &&
+            (selectedCategory == null || MatchesCategory(p, selectedCategory))
+        ).ToList();
+    }
+
+    private void OnSearch(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterProducts();
+    }
+
+    private bool MatchesCategory(ProductDto p, string category)
+    {
+        var name = p.Name.ToLower();
+        var desc = p.Description.ToLower();
+        return category switch
+        {
+            "cattle" => name.Contains("dairy") || name.Contains("cattle") || desc.Contains("cow"),
+            "poultry" => name.Contains("layer") || name.Contains("chick") || name.Contains("poultry") || desc.Contains("hen"),
+            "goats" => name.Contains("goat") || desc.Contains("goat"),
+            "pigs" => name.Contains("pig") || desc.Contains("pig"),
+            "rabbits" => name.Contains("rabbit") || desc.Contains("rabbit"),
+            "fish" => name.Contains("fish") || desc.Contains("fish"),
+            "pesticides" => name.Contains("dip") || name.Contains("pesticide") || desc.Contains("pest"),
+            "fertilizers" => name.Contains("fertil") || desc.Contains("fertil"),
+            "seeds" => name.Contains("seed") || desc.Contains("seed"),
+            "herbicides" => name.Contains("herb") || desc.Contains("weed"),
+            "tools" => name.Contains("hoe") || name.Contains("tool") || desc.Contains("tool"),
+            "vet" => name.Contains("amox") || name.Contains("vaccine") || desc.Contains("antibiotic"),
+            _ => true
+        };
+    }
+
+    private void SelectCategory(string? category, string? name)
+    {
+        selectedCategory = category;
+        selectedCategoryName = name;
+        selectedMainCategory = animalCategories.ContainsKey(category ?? "") ? "animal" :
+                               cropCategories.ContainsKey(category ?? "") ? "crops" : null;
+        FilterProducts();
+    }
+
+    private void ToggleAnimal()
+    {
+        showAnimalSub = !showAnimalSub;
+        showCropSub = false;
+        selectedMainCategory = showAnimalSub ? "animal" : null;
+    }
+
+    private void ToggleCrops()
+    {
+        showCropSub = !showCropSub;
+        showAnimalSub = false;
+        selectedMainCategory = showCropSub ? "crops" : null;
+    }
+
+    private async Task AddToCart(ProductDto product)
+    {
+        try
+        {
+            var cartItem = new
+            {
+                UserId = AuthState.UserId,
+                ProductId = product.Id,
+                Quantity = 1
+            };
+            var response = await Http.PostAsJsonAsync("api/cart", cartItem);
+            if (response.IsSuccessStatusCode)
+            {
+                addedMessage = $"{product.Name} added to cart!";
+                StateHasChanged();
+                await Task.Delay(2500);
+                addedMessage = string.Empty;
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private string GetProductImage(string name)
+    {
+        var n = name.ToLower();
+        if (n.Contains("dairy meal") || n.Contains("dairy feed"))
+            return "https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=500&q=80";
+        if (n.Contains("dairy") || n.Contains("cattle"))
+            return "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=500&q=80";
+        if (n.Contains("layer") || n.Contains("mash") || n.Contains("chick") || n.Contains("poultry"))
+            return "https://images.unsplash.com/photo-1612170153139-6f881ff067e0?w=500&q=80";
+        if (n.Contains("dip wash") || n.Contains("acaricide"))
+            return "https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=500&q=80";
+        if (n.Contains("pesticide") || n.Contains("herbicide"))
+            return "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=500&q=80";
+        if (n.Contains("amox") || n.Contains("antibiotic") || n.Contains("vaccine"))
+            return "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&q=80";
+        if (n.Contains("hoe") || n.Contains("panga") || n.Contains("tool"))
+            return "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=500&q=80";
+        if (n.Contains("seed"))
+            return "https://images.unsplash.com/photo-1592878849122-facb97ed40f3?w=500&q=80";
+        if (n.Contains("fertil"))
+            return "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&q=80";
+        if (n.Contains("goat"))
+            return "https://images.unsplash.com/photo-1524024973431-2ad916746881?w=500&q=80";
+        if (n.Contains("pig") || n.Contains("pork"))
+            return "https://images.unsplash.com/photo-1585408816368-d3d01e0c0a54?w=500&q=80";
+        if (n.Contains("fish"))
+            return "https://images.unsplash.com/photo-1534043464124-3be32fe000c9?w=500&q=80";
+        return "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&q=80";
+    }
+
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public int StockQuantity { get; set; }
+        public int LowStockThreshold { get; set; }
+    }
+}

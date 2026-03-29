@@ -1,0 +1,293 @@
+@page "/register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div style="min-height: 100vh; display: flex; background: #f5f6fa;">
+
+    <!-- Left Side — Form -->
+    <div style="
+        width: 520px; display: flex; align-items: center;
+        justify-content: center; padding: 40px; background: white;
+    ">
+        <div style="width: 100%; max-width: 420px;">
+
+            <!-- Logo -->
+            <div style="text-align: center; margin-bottom: 28px;">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">🌿</div>
+                <h4 style="font-weight: 900; color: #1a1a2e; margin: 0;">Create Account</h4>
+                <p style="color: #999; font-size: 0.88rem; margin: 6px 0 0;">Join thousands of Kenyan farmers today</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div style="
+                    background: #ffebee; color: #c62828;
+                    padding: 12px 16px; border-radius: 10px;
+                    font-size: 0.88rem; font-weight: 600;
+                    margin-bottom: 20px; border-left: 4px solid #c62828;
+                ">⚠️ @errorMessage</div>
+            }
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                <div style="grid-column: span 2;">
+                    <label style="@LabelStyle">Full Name</label>
+                    <input
+                        @bind="fullName"
+                        placeholder="e.g. John Kamau"
+                        style="@InputStyle"
+                        onfocus="this.style.borderColor='#1b5e20'"
+                        onblur="this.style.borderColor='#e8eaf0'"
+                    />
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="@LabelStyle">Email Address</label>
+                    <input
+                        @bind="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        style="@InputStyle"
+                        onfocus="this.style.borderColor='#1b5e20'"
+                        onblur="this.style.borderColor='#e8eaf0'"
+                    />
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="@LabelStyle">Phone Number</label>
+                    <input
+                        @bind="phoneNumber"
+                        placeholder="e.g. 0712345678"
+                        style="@InputStyle"
+                        onfocus="this.style.borderColor='#1b5e20'"
+                        onblur="this.style.borderColor='#e8eaf0'"
+                    />
+                    <small style="color: #999; font-size: 0.75rem;">Format: 07XXXXXXXX or 01XXXXXXXX</small>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="@LabelStyle">Password</label>
+                    <div style="position: relative;">
+                        <input
+                            @bind="password"
+                            @oninput="OnPasswordInput"
+                            type="@passwordInputType"
+                            placeholder="Min 8 chars, uppercase, number, symbol"
+                            style="@InputStyle padding-right: 56px;"
+                            onfocus="this.style.borderColor='#1b5e20'"
+                            onblur="this.style.borderColor='#e8eaf0'"
+                        />
+                        <button @onclick="TogglePassword" style="
+                            position: absolute; right: 14px; top: 50%;
+                            transform: translateY(-50%);
+                            background: none; border: none; cursor: pointer;
+                            color: #999; font-size: 0.82rem; font-weight: 600;
+                        ">@passwordToggleText</button>
+                    </div>
+
+                    <!-- Password strength bar -->
+                    @if (!string.IsNullOrEmpty(password))
+                    {
+                        <div style="margin-top: 8px;">
+                            <div style="display: flex; gap: 4px; margin-bottom: 4px;">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    int idx = i;
+                                    <div style="
+                                        flex: 1; height: 4px; border-radius: 50px;
+                                        background: @(idx < passwordScore ? GetStrengthColor() : "#e0e0e0");
+                                        transition: background 0.3s;
+                                    "></div>
+                                }
+                            </div>
+                            <small style="color: @GetStrengthColor(); font-weight: 600; font-size: 0.75rem;">
+                                @GetPasswordStrength()
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Requirements -->
+            <div style="background: #f8fffe; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; border: 1px solid #e8f5e9;">
+                <p style="font-size: 0.75rem; font-weight: 800; color: #1b5e20; margin: 0 0 8px;">Password Requirements:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <small style="color: @(password.Length >= 8 ? "#2e7d32" : "#bbb"); font-size: 0.75rem;">
+                        @(password.Length >= 8 ? "✅" : "○") 8+ characters
+                    </small>
+                    <small style="color: @(password.Any(char.IsUpper) ? "#2e7d32" : "#bbb"); font-size: 0.75rem;">
+                        @(password.Any(char.IsUpper) ? "✅" : "○") Uppercase letter
+                    </small>
+                    <small style="color: @(password.Any(char.IsLower) ? "#2e7d32" : "#bbb"); font-size: 0.75rem;">
+                        @(password.Any(char.IsLower) ? "✅" : "○") Lowercase letter
+                    </small>
+                    <small style="color: @(password.Any(char.IsDigit) ? "#2e7d32" : "#bbb"); font-size: 0.75rem;">
+                        @(password.Any(char.IsDigit) ? "✅" : "○") Number
+                    </small>
+                    <small style="color: @(password.Any(ch => !char.IsLetterOrDigit(ch)) ? "#2e7d32" : "#bbb"); font-size: 0.75rem;">
+                        @(password.Any(ch => !char.IsLetterOrDigit(ch)) ? "✅" : "○") Special character
+                    </small>
+                </div>
+            </div>
+
+            <button @onclick="HandleRegister" disabled="@isLoading" style="
+                width: 100%; padding: 14px;
+                background: linear-gradient(135deg, #1b5e20, #2e7d32);
+                color: white; border: none; border-radius: 10px;
+                font-size: 1rem; font-weight: 700; cursor: pointer;
+                box-shadow: 0 4px 15px rgba(27,94,32,0.35);
+                margin-bottom: 20px;
+            ">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    <span>Creating account...</span>
+                }
+                else
+                {
+                    <span>🚀 Create Account</span>
+                }
+            </button>
+
+            <p style="text-align: center; color: #999; font-size: 0.88rem; margin: 0;">
+                Already have an account?
+                <a href="/login" style="color: #1b5e20; font-weight: 700; text-decoration: none;">
+                    Sign in here
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Right Side — Image -->
+    <div style="
+        flex: 1;
+        background-image: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    ">
+        <div style="position: absolute; inset: 0; background: rgba(0,40,0,0.65);"></div>
+        <div style="position: relative; z-index: 1; color: white; text-align: center; max-width: 400px;">
+            <h2 style="font-weight: 900; font-size: 2rem; margin: 0 0 16px;">Start Your Farm Journey</h2>
+            <p style="opacity: 0.85; font-size: 1rem; line-height: 1.7; margin-bottom: 32px;">
+                Get access to quality farm inputs, veterinary products and fast delivery right to your farm.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                @foreach (var feature in new[] {
+                    ("🌾", "Quality Products"),
+                    ("🚚", "Fast Delivery"),
+                    ("📱", "M-Pesa Payment"),
+                    ("💊", "Vet Medicine")
+                })
+                {
+                    <div style="
+                        background: rgba(255,255,255,0.1);
+                        border: 1px solid rgba(255,255,255,0.2);
+                        border-radius: 12px; padding: 16px;
+                        backdrop-filter: blur(10px);
+                    ">
+                        <div style="font-size: 1.5rem; margin-bottom: 6px;">@feature.Item1</div>
+                        <p style="font-size: 0.82rem; margin: 0; font-weight: 600;">@feature.Item2</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string fullName = string.Empty;
+    private string email = string.Empty;
+    private string phoneNumber = string.Empty;
+    private string password = string.Empty;
+    private string errorMessage = string.Empty;
+    private string passwordInputType = "password";
+    private string passwordToggleText = "Show";
+    private bool isLoading = false;
+    private int passwordScore = 0;
+
+    private string LabelStyle => "font-weight: 700; font-size: 0.85rem; color: #444; display: block; margin-bottom: 7px;";
+    private string InputStyle => "width: 100%; padding: 13px 16px; border: 1.5px solid #e8eaf0; border-radius: 10px; font-size: 0.9rem; outline: none; box-sizing: border-box; background: #fafafa; transition: border 0.2s;";
+
+    private void TogglePassword()
+    {
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordToggleText = passwordToggleText == "Show" ? "Hide" : "Show";
+    }
+
+    private void OnPasswordInput(ChangeEventArgs e)
+    {
+        password = e.Value?.ToString() ?? string.Empty;
+        passwordScore = 0;
+        if (password.Length >= 8) passwordScore++;
+        if (password.Any(char.IsUpper)) passwordScore++;
+        if (password.Any(char.IsLower)) passwordScore++;
+        if (password.Any(char.IsDigit)) passwordScore++;
+        if (password.Any(ch => !char.IsLetterOrDigit(ch))) passwordScore++;
+    }
+
+    private string GetPasswordStrength() => passwordScore switch
+    {
+        1 => "Very Weak",
+        2 => "Weak",
+        3 => "Fair",
+        4 => "Strong",
+        5 => "Very Strong",
+        _ => ""
+    };
+
+    private string GetStrengthColor() => passwordScore switch
+    {
+        1 => "#ef5350",
+        2 => "#ff7043",
+        3 => "#ffa726",
+        4 => "#66bb6a",
+        5 => "#2e7d32",
+        _ => "#e0e0e0"
+    };
+
+    private async Task HandleRegister()
+    {
+        errorMessage = string.Empty;
+        if (string.IsNullOrWhiteSpace(fullName)) { errorMessage = "Full name is required."; return; }
+        if (string.IsNullOrWhiteSpace(email)) { errorMessage = "Email is required."; return; }
+        if (!email.Contains("@") || !email.Contains(".")) { errorMessage = "Please enter a valid email address."; return; }
+        if (string.IsNullOrWhiteSpace(phoneNumber)) { errorMessage = "Phone number is required."; return; }
+        if (string.IsNullOrWhiteSpace(password)) { errorMessage = "Password is required."; return; }
+        if (password.Length < 8) { errorMessage = "Password must be at least 8 characters."; return; }
+        if (!password.Any(char.IsUpper)) { errorMessage = "Password must contain at least one uppercase letter."; return; }
+        if (!password.Any(char.IsLower)) { errorMessage = "Password must contain at least one lowercase letter."; return; }
+        if (!password.Any(char.IsDigit)) { errorMessage = "Password must contain at least one number."; return; }
+        if (!password.Any(ch => !char.IsLetterOrDigit(ch))) { errorMessage = "Password must contain at least one special character e.g. @, #, !"; return; }
+
+        isLoading = true;
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/auth/register", new
+            {
+                FullName = fullName,
+                Email = email,
+                PhoneNumber = phoneNumber,
+                Password = password,
+                Role = "Customer"
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                errorMessage = "Registration failed. Email may already exist.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

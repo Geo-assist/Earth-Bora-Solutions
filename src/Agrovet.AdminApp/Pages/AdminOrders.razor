@@ -1,0 +1,381 @@
+@page "/admin-orders"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<div style="padding: 8px 0;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">🧾 Orders Management</h4>
+            <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">View, update and print receipts for all orders</p>
+        </div>
+        <button @onclick="LoadOrders" style="
+            background: #1b5e20; color: white; border: none;
+            padding: 10px 20px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; font-size: 0.88rem;
+        ">🔄 Refresh</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px;">
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">All Orders</p>
+            <h3 style="font-weight: 900; color: #e0e0e0; margin: 0;">@(orders?.Count ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Pending</p>
+            <h3 style="font-weight: 900; color: #ffa726; margin: 0;">@(orders?.Count(o => o.Status == "Pending") ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Confirmed</p>
+            <h3 style="font-weight: 900; color: #64b5f6; margin: 0;">@(orders?.Count(o => o.Status == "Confirmed") ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Delivered</p>
+            <h3 style="font-weight: 900; color: #4caf50; margin: 0;">@(orders?.Count(o => o.Status == "Delivered") ?? 0)</h3>
+        </div>
+        <div style="background: #1e1e2e; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Cancelled</p>
+            <h3 style="font-weight: 900; color: #ef5350; margin: 0;">@(orders?.Count(o => o.Status == "Cancelled") ?? 0)</h3>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+        @foreach (var tab in new[] { "All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled" })
+        {
+            <button @onclick="@(() => SetFilter(tab))" style="
+                padding: 8px 18px; border-radius: 50px; cursor: pointer;
+                font-size: 0.82rem; font-weight: 700; border: none;
+                background: @(activeFilter == tab ? "#1b5e20" : "#1e1e2e");
+                color: @(activeFilter == tab ? "white" : "#888");
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            ">@tab</button>
+        }
+    </div>
+
+    <div style="background: #1e1e2e; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); overflow: hidden;">
+        @if (isLoading)
+        {
+            <div style="text-align: center; padding: 60px; color: #666;">
+                <div class="spinner-border text-success"></div>
+                <p class="mt-3">Loading orders...</p>
+            </div>
+        }
+        else if (filteredOrders.Count == 0)
+        {
+            <div style="text-align: center; padding: 60px; color: #666;">
+                <div style="font-size: 3rem;">🧾</div>
+                <h5 style="margin-top: 12px;">No orders found</h5>
+            </div>
+        }
+        else
+        {
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #16213e; border-bottom: 2px solid #2a2a3e;">
+                        <th style="@ThStyle">Order #</th>
+                        <th style="@ThStyle">Date</th>
+                        <th style="@ThStyle">Customer</th>
+                        <th style="@ThStyle">Items</th>
+                        <th style="@ThStyle">Total</th>
+                        <th style="@ThStyle">Payment</th>
+                        <th style="@ThStyle">Status</th>
+                        <th style="@ThStyle">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in filteredOrders)
+                    {
+                        <tr style="border-bottom: 1px solid #2a2a3e;"
+                            onmouseover="this.style.background='#16213e'"
+                            onmouseout="this.style.background='transparent'">
+                            <td style="@TdStyle">
+                                <span style="font-weight: 800; color: #4caf50; font-family: monospace;">
+                                    #@order.Id.ToString().Substring(0, 8).ToUpper()
+                                </span>
+                            </td>
+                            <td style="@TdStyle color: #888; font-size: 0.82rem;">
+                                @order.OrderedAt.ToString("dd MMM yyyy")
+                            </td>
+                            <td style="@TdStyle">
+                                <p style="font-weight: 700; margin: 0; color: #e0e0e0;">@order.UserName</p>
+                                <p style="margin: 2px 0 0; font-size: 0.75rem; color: #666;">@order.UserPhone</p>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="background: #1b3a2e; color: #4caf50; padding: 3px 10px; border-radius: 50px; font-size: 0.78rem; font-weight: 700;">
+                                    @order.OrderItems.Count item(s)
+                                </span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 900; color: #4caf50; font-size: 1rem;">KSh @order.TotalAmount</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="
+                                    padding: 4px 12px; border-radius: 50px;
+                                    font-size: 0.75rem; font-weight: 700;
+                                    background: @GetPaymentBg(order.PaymentStatus);
+                                    color: @GetPaymentColor(order.PaymentStatus);
+                                ">@order.PaymentStatus</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <select @onchange="@(e => UpdateStatus(order.Id, e.Value?.ToString()))" style="
+                                    padding: 7px 12px; border: 1.5px solid #2a2a3e;
+                                    border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+                                    outline: none; background: #16213e; color: #e0e0e0; cursor: pointer;
+                                ">
+                                    <option value="">@order.Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Confirmed">Confirmed</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </td>
+                            <td style="@TdStyle">
+                                <div style="display: flex; gap: 6px;">
+                                    <button @onclick="@(() => ViewDetails(order))" style="
+                                        background: #1a2a4a; color: #64b5f6; border: none;
+                                        padding: 7px 12px; border-radius: 8px;
+                                        font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                                    ">👁 View</button>
+                                    <button @onclick="@(async () => await DownloadReceipt(order))" style="
+                                        background: #1b3a2e; color: #4caf50; border: none;
+                                        padding: 7px 12px; border-radius: 8px;
+                                        font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                                    ">⬇ PDF</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div style="padding: 16px 24px; background: #16213e; display: flex; justify-content: space-between;">
+                <p style="margin: 0; color: #666; font-size: 0.85rem;">
+                    Showing @filteredOrders.Count of @(orders?.Count ?? 0) orders
+                </p>
+                <p style="margin: 0; color: #4caf50; font-size: 0.85rem; font-weight: 600;">@successMessage</p>
+            </div>
+        }
+    </div>
+</div>
+
+@if (selectedOrder != null)
+{
+    <div style="
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.7); z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        backdrop-filter: blur(4px);
+    " @onclick="CloseDetails">
+        <div style="
+            background: #1e1e2e; border-radius: 20px; padding: 32px;
+            width: 560px; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid #2a2a3e;
+        " @onclick:stopPropagation="true">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h5 style="font-weight: 900; color: #e0e0e0; margin: 0;">
+                        Order #@selectedOrder.Id.ToString().Substring(0, 8).ToUpper()
+                    </h5>
+                    <p style="color: #666; font-size: 0.82rem; margin: 4px 0 0;">
+                        @selectedOrder.OrderedAt.ToString("dd MMMM yyyy, hh:mm tt")
+                    </p>
+                </div>
+                <button @onclick="CloseDetails" style="
+                    background: #2a2a3e; color: #e0e0e0; border: none;
+                    width: 36px; height: 36px; border-radius: 50%;
+                    font-size: 1rem; cursor: pointer; font-weight: 700;
+                ">✕</button>
+            </div>
+
+            <div style="background: #16213e; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px;">Customer Details</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <p style="color: #666; font-size: 0.78rem; margin: 0;">Name</p>
+                        <p style="color: #e0e0e0; font-weight: 700; margin: 2px 0 0;">@selectedOrder.UserName</p>
+                    </div>
+                    <div>
+                        <p style="color: #666; font-size: 0.78rem; margin: 0;">Phone</p>
+                        <p style="color: #e0e0e0; font-weight: 700; margin: 2px 0 0;">@selectedOrder.UserPhone</p>
+                    </div>
+                    <div>
+                        <p style="color: #666; font-size: 0.78rem; margin: 0;">Status</p>
+                        <span style="
+                            padding: 3px 10px; border-radius: 50px;
+                            font-size: 0.75rem; font-weight: 700;
+                            background: @GetStatusBg(selectedOrder.Status);
+                            color: @GetStatusColor(selectedOrder.Status);
+                        ">@selectedOrder.Status</span>
+                    </div>
+                    <div>
+                        <p style="color: #666; font-size: 0.78rem; margin: 0;">Payment</p>
+                        <span style="
+                            padding: 3px 10px; border-radius: 50px;
+                            font-size: 0.75rem; font-weight: 700;
+                            background: @GetPaymentBg(selectedOrder.PaymentStatus);
+                            color: @GetPaymentColor(selectedOrder.PaymentStatus);
+                        ">@selectedOrder.PaymentStatus</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px;">Order Items</p>
+            @foreach (var item in selectedOrder.OrderItems)
+            {
+                <div style="
+                    background: #16213e; border-radius: 10px; padding: 14px 16px; margin-bottom: 8px;
+                    display: flex; justify-content: space-between; align-items: center;
+                ">
+                    <div>
+                        <p style="font-weight: 700; color: #e0e0e0; margin: 0;">@item.ProductName</p>
+                        <p style="color: #666; font-size: 0.8rem; margin: 2px 0 0;">@item.Quantity x KSh @item.UnitPrice</p>
+                    </div>
+                    <span style="font-weight: 900; color: #4caf50;">KSh @item.Subtotal</span>
+                </div>
+            }
+
+            <div style="
+                background: #1b3a2e; border-radius: 12px; padding: 16px; margin-top: 16px;
+                display: flex; justify-content: space-between; align-items: center;
+            ">
+                <span style="font-weight: 800; color: #e0e0e0; font-size: 1rem;">Total Amount</span>
+                <span style="font-weight: 900; color: #4caf50; font-size: 1.3rem;">KSh @selectedOrder.TotalAmount</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button @onclick="@(async () => await DownloadReceipt(selectedOrder))" style="
+                    flex: 1; background: #1b5e20; color: white; border: none;
+                    padding: 12px; border-radius: 50px;
+                    font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                ">⬇ Download PDF Receipt</button>
+                <button @onclick="CloseDetails" style="
+                    background: #2a2a3e; color: #e0e0e0; border: none;
+                    padding: 12px 24px; border-radius: 50px;
+                    font-weight: 600; cursor: pointer; font-size: 0.9rem;
+                ">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<OrderDto>? orders;
+    private List<OrderDto> filteredOrders = new();
+    private bool isLoading = true;
+    private string activeFilter = "All";
+    private string successMessage = string.Empty;
+    private OrderDto? selectedOrder = null;
+
+    private string ThStyle => "padding: 14px 20px; text-align: left; font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px;";
+    private string TdStyle => "padding: 14px 20px; font-size: 0.88rem;";
+
+    protected override async Task OnInitializedAsync() => await LoadOrders();
+
+    private async Task LoadOrders()
+    {
+        isLoading = true;
+        try
+        {
+            orders = await Http.GetFromJsonAsync<List<OrderDto>>("api/orders") ?? new();
+            SetFilter(activeFilter);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            orders = new();
+        }
+        finally { isLoading = false; }
+    }
+
+    private void SetFilter(string filter)
+    {
+        activeFilter = filter;
+        filteredOrders = filter == "All"
+            ? orders?.ToList() ?? new()
+            : orders?.Where(o => o.Status == filter).ToList() ?? new();
+    }
+
+    private async Task UpdateStatus(Guid id, string? status)
+    {
+        if (string.IsNullOrEmpty(status)) return;
+        try
+        {
+            await Http.PutAsJsonAsync($"api/orders/{id}/status", status);
+            successMessage = $"✅ Status updated to {status}";
+            await LoadOrders();
+            await Task.Delay(3000);
+            successMessage = string.Empty;
+            StateHasChanged();
+        }
+        catch (Exception ex) { Console.WriteLine($"Error: {ex.Message}"); }
+    }
+
+    private void ViewDetails(OrderDto order) => selectedOrder = order;
+    private void CloseDetails() => selectedOrder = null;
+
+    private async Task DownloadReceipt(OrderDto order)
+    {
+        var orderData = new
+        {
+            id = order.Id.ToString(),
+            date = order.OrderedAt.ToString("dd MMMM yyyy"),
+            customerName = order.UserName,
+            customerPhone = order.UserPhone,
+            status = order.Status,
+            paymentStatus = order.PaymentStatus,
+            totalAmount = order.TotalAmount,
+            items = order.OrderItems.Select(i => new
+            {
+                productName = i.ProductName,
+                quantity = i.Quantity,
+                unitPrice = i.UnitPrice,
+                subtotal = i.Subtotal
+            }).ToArray()
+        };
+        await JS.InvokeVoidAsync("printReceipt", orderData);
+    }
+
+    private string GetStatusBg(string s) => s switch {
+        "Confirmed" => "#1a2a4a", "Pending" => "#2a2010",
+        "Processing" => "#1a1a3a", "Shipped" => "#2a1a3a",
+        "Delivered" => "#1b3a2e", "Cancelled" => "#3a1a1a", _ => "#2a2a3e"
+    };
+
+    private string GetStatusColor(string s) => s switch {
+        "Confirmed" => "#64b5f6", "Pending" => "#ffa726",
+        "Processing" => "#7986cb", "Shipped" => "#ba68c8",
+        "Delivered" => "#4caf50", "Cancelled" => "#ef5350", _ => "#888"
+    };
+
+    private string GetPaymentBg(string s) => s switch {
+        "Paid" => "#1b3a2e", "Pending" => "#2a2010", "Failed" => "#3a1a1a", _ => "#2a2a3e"
+    };
+
+    private string GetPaymentColor(string s) => s switch {
+        "Paid" => "#4caf50", "Pending" => "#ffa726", "Failed" => "#ef5350", _ => "#888"
+    };
+
+    public class OrderDto
+    {
+        public Guid Id { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string PaymentStatus { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public DateTime OrderedAt { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string UserPhone { get; set; } = string.Empty;
+        public List<OrderItemDto> OrderItems { get; set; } = new();
+    }
+
+    public class OrderItemDto
+    {
+        public Guid Id { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Subtotal { get; set; }
+    }
+}

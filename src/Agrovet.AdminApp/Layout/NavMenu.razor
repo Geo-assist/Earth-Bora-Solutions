@@ -1,0 +1,59 @@
+@inject NavigationManager Navigation
+@inject Agrovet.AdminApp.Services.AdminAuthService AuthService
+
+<nav style="
+    background: #1a1a2e;
+    padding: 0 32px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+">
+    <div @onclick="@(() => Navigation.NavigateTo("/"))" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.5rem;">🌿</span>
+        <span style="color: white; font-size: 1.2rem; font-weight: 900; letter-spacing: 1px;">
+            EARTH BORA SOLUTIONS <span style="color: #69f0ae; font-size: 0.75rem; font-weight: 600;">ADMIN</span>
+        </span>
+    </div>
+
+    <div style="display: flex; gap: 4px; align-items: center;">
+        <button @onclick="@(() => Navigation.NavigateTo("/"))" style="@BtnStyle">📊 Dashboard</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/manage-products"))" style="@BtnStyle">🌾 Products</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/manage-categories"))" style="@BtnStyle">📂 Categories</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/inventory"))" style="@BtnStyle">📦 Inventory</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/admin-orders"))" style="@BtnStyle">🧾 Orders</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/customers"))" style="@BtnStyle">👥 Customers</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/reports"))" style="@BtnStyle">📊 Reports</button>
+        <button @onclick="@(() => Navigation.NavigateTo("/settings"))" style="@BtnStyle">⚙️ Settings</button>
+
+        <div style="height: 30px; width: 1px; background: rgba(255,255,255,0.2); margin: 0 8px;"></div>
+
+        <div style="
+            background: rgba(255,255,255,0.1);
+            color: white; padding: 6px 14px;
+            border-radius: 50px; font-size: 0.82rem; font-weight: 600;
+        ">👤 @AuthService.FullName</div>
+
+        <button @onclick="Logout" style="
+            background: rgba(255,80,80,0.2);
+            color: white;
+            border: 1px solid rgba(255,80,80,0.4);
+            padding: 8px 16px; border-radius: 50px;
+            font-size: 0.82rem; font-weight: 600; cursor: pointer;
+        ">Logout</button>
+    </div>
+</nav>
+
+@code {
+    private string BtnStyle => "background: transparent; color: rgba(255,255,255,0.85); border: none; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;";
+
+    private void Logout()
+    {
+        AuthService.Logout();
+        Navigation.NavigateTo("/login");
+    }
+}

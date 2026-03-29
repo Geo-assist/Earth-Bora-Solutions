@@ -1,0 +1,290 @@
+@page "/manage-categories"
+@inject HttpClient Http
+
+<div style="padding: 8px 0;">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">📂 Manage Categories</h4>
+            <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">Organise your products into categories</p>
+        </div>
+        <button @onclick="ShowAddForm" style="
+            background: #1b5e20; color: white; border: none;
+            padding: 12px 24px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(27,94,32,0.3);
+        ">+ Add New Category</button>
+    </div>
+
+    <!-- Success Message -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div style="
+            background: #e8f5e9; color: #2e7d32;
+            padding: 12px 20px; border-radius: 10px;
+            font-weight: 600; margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+        ">✅ @successMessage</div>
+    }
+
+    <!-- Add/Edit Form -->
+    @if (showForm)
+    {
+        <div style="
+            background: #1e1e2e; border-radius: 16px;
+            padding: 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 4px solid #1b5e20;
+        ">
+            <h5 style="font-weight: 800; color: #e0e0e0; margin: 0 0 24px;">
+                @(editingId == null ? "➕ Add New Category" : "✏️ Edit Category")
+            </h5>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div style="
+                    background: #ffebee; color: #c62828;
+                    padding: 12px 16px; border-radius: 10px;
+                    font-size: 0.88rem; font-weight: 600;
+                    margin-bottom: 20px;
+                ">⚠️ @errorMessage</div>
+            }
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                    <label style="font-weight: 700; font-size: 0.82rem; color: #555; display: block; margin-bottom: 6px;">
+                        Category Name *
+                    </label>
+                    <input
+                        class="form-control"
+                        @bind="categoryName"
+                        placeholder="e.g. Animal Feeds"
+                        style="border-radius: 10px; border: 1.5px solid #2a2a3e; padding: 10px 14px; font-size: 0.9rem;"
+                    />
+                </div>
+                <div>
+                    <label style="font-weight: 700; font-size: 0.82rem; color: #555; display: block; margin-bottom: 6px;">
+                        Description
+                    </label>
+                    <input
+                        class="form-control"
+                        @bind="categoryDescription"
+                        placeholder="Brief description of this category"
+                        style="border-radius: 10px; border: 1.5px solid #2a2a3e; padding: 10px 14px; font-size: 0.9rem;"
+                    />
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button @onclick="SaveCategory" style="
+                    background: #1b5e20; color: white; border: none;
+                    padding: 12px 28px; border-radius: 50px;
+                    font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                ">💾 Save Category</button>
+                <button @onclick="CancelForm" style="
+                    background: #16213e; color: #666; border: none;
+                    padding: 12px 24px; border-radius: 50px;
+                    font-weight: 600; cursor: pointer; font-size: 0.9rem;
+                ">Cancel</button>
+            </div>
+        </div>
+    }
+
+    <!-- Categories Grid -->
+    @if (isLoading)
+    {
+        <div style="text-align: center; padding: 60px;">
+            <div class="spinner-border text-success"></div>
+            <p class="mt-3 text-muted">Loading categories...</p>
+        </div>
+    }
+    else if (categories.Count == 0)
+    {
+        <div style="
+            background: #1e1e2e; border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            text-align: center; padding: 60px; color: #666;
+        ">
+            <div style="font-size: 3rem;">📂</div>
+            <h5 style="margin-top: 12px;">No categories yet</h5>
+            <p>Click "Add New Category" to get started</p>
+        </div>
+    }
+    else
+    {
+        <!-- Stats -->
+        <div style="
+            background: #1e1e2e; border-radius: 12px;
+            padding: 16px 24px; margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 8px;
+        ">
+            <span style="font-size: 1.2rem;">📂</span>
+            <span style="font-weight: 700; color: #e0e0e0;">@categories.Count</span>
+            <span style="color: #666;">categories in total</span>
+        </div>
+
+        <!-- Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            @foreach (var cat in categories)
+            {
+                <div style="
+                    background: #1e1e2e; border-radius: 16px;
+                    padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+                    border-left: 4px solid #4caf50;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                "
+                onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'"
+                onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'">
+
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                        <div style="
+                            width: 44px; height: 44px; background: #e8f5e9;
+                            border-radius: 12px; display: flex;
+                            align-items: center; justify-content: center;
+                            font-size: 1.3rem;
+                        ">📂</div>
+                        <div style="display: flex; gap: 6px;">
+                            <button @onclick="@(() => EditCategory(cat))" style="
+                                background: #e3f2fd; color: #1565c0; border: none;
+                                padding: 6px 14px; border-radius: 8px;
+                                font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                            ">✏️ Edit</button>
+                            <button @onclick="@(() => DeleteCategory(cat.Id))" style="
+                                background: #ffebee; color: #c62828; border: none;
+                                padding: 6px 14px; border-radius: 8px;
+                                font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                            ">🗑️</button>
+                        </div>
+                    </div>
+
+                    <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 6px; font-size: 1rem;">
+                        @cat.Name
+                    </h6>
+                    <p style="color: #666; font-size: 0.82rem; margin: 0; line-height: 1.5;">
+                        @(string.IsNullOrEmpty(cat.Description) ? "No description provided" : cat.Description)
+                    </p>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<CategoryDto> categories = new();
+    private bool showForm = false;
+    private bool isLoading = true;
+    private Guid? editingId = null;
+    private string categoryName = string.Empty;
+    private string categoryDescription = string.Empty;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+    }
+
+    private async Task LoadCategories()
+    {
+        isLoading = true;
+        try
+        {
+            categories = await Http.GetFromJsonAsync<List<CategoryDto>>("api/categories") ?? new();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void ShowAddForm()
+    {
+        editingId = null;
+        categoryName = string.Empty;
+        categoryDescription = string.Empty;
+        errorMessage = string.Empty;
+        showForm = true;
+    }
+
+    private void EditCategory(CategoryDto cat)
+    {
+        editingId = cat.Id;
+        categoryName = cat.Name;
+        categoryDescription = cat.Description;
+        errorMessage = string.Empty;
+        showForm = true;
+    }
+
+    private void CancelForm()
+    {
+        showForm = false;
+        editingId = null;
+        errorMessage = string.Empty;
+    }
+
+    private async Task SaveCategory()
+    {
+        if (string.IsNullOrWhiteSpace(categoryName))
+        {
+            errorMessage = "Category name is required.";
+            return;
+        }
+
+        var data = new { Name = categoryName, Description = categoryDescription };
+
+        try
+        {
+            if (editingId == null)
+            {
+                await Http.PostAsJsonAsync("api/categories", data);
+                successMessage = $"Category '{categoryName}' added successfully!";
+            }
+            else
+            {
+                await Http.PutAsJsonAsync($"api/categories/{editingId}", data);
+                successMessage = $"Category '{categoryName}' updated successfully!";
+            }
+
+            showForm = false;
+            editingId = null;
+            await LoadCategories();
+            await Task.Delay(3000);
+            successMessage = string.Empty;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    private async Task DeleteCategory(Guid id)
+    {
+        try
+        {
+            await Http.DeleteAsync($"api/categories/{id}");
+            successMessage = "Category deleted successfully!";
+            await LoadCategories();
+            await Task.Delay(3000);
+            successMessage = string.Empty;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    public class CategoryDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+    }
+}

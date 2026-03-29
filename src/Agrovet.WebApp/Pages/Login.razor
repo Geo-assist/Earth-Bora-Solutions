@@ -1,0 +1,215 @@
+@page "/login"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject Agrovet.WebApp.Services.AuthStateService AuthState
+
+<div style="
+    min-height: 100vh;
+    display: flex;
+    background: #f5f6fa;
+">
+    <!-- Left Side — Image -->
+    <div style="
+        flex: 1;
+        background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        padding: 40px;
+    ">
+        <div style="position: absolute; inset: 0; background: rgba(0,40,0,0.6);"></div>
+        <div style="position: relative; z-index: 1; color: white;">
+            <h2 style="font-weight: 900; font-size: 2rem; margin: 0 0 12px;">Welcome to Earth Bora Solutions!</h2>
+            <p style="opacity: 0.85; font-size: 1rem; max-width: 360px; line-height: 1.7;">
+                Your trusted partner for quality farm inputs and veterinary products across Kenya.
+            </p>
+            <div style="display: flex; gap: 20px; margin-top: 24px;">
+                <div style="text-align: center;">
+                    <p style="font-size: 1.5rem; font-weight: 900; color: #69f0ae; margin: 0;">500+</p>
+                    <p style="font-size: 0.78rem; opacity: 0.7; margin: 0;">Products</p>
+                </div>
+                <div style="text-align: center;">
+                    <p style="font-size: 1.5rem; font-weight: 900; color: #69f0ae; margin: 0;">24/7</p>
+                    <p style="font-size: 0.78rem; opacity: 0.7; margin: 0;">Online</p>
+                </div>
+                <div style="text-align: center;">
+                    <p style="font-size: 1.5rem; font-weight: 900; color: #69f0ae; margin: 0;">M-Pesa</p>
+                    <p style="font-size: 0.78rem; opacity: 0.7; margin: 0;">Payments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side — Form -->
+    <div style="
+        width: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: white;
+    ">
+        <div style="width: 100%; max-width: 380px;">
+
+            <!-- Logo -->
+            <div style="text-align: center; margin-bottom: 36px;">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">🌿</div>
+                <h4 style="font-weight: 900; color: #1a1a2e; margin: 0;">Sign In</h4>
+                <p style="color: #999; font-size: 0.88rem; margin: 6px 0 0;">Enter your credentials to continue</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div style="
+                    background: #ffebee; color: #c62828;
+                    padding: 12px 16px; border-radius: 10px;
+                    font-size: 0.88rem; font-weight: 600;
+                    margin-bottom: 20px; border-left: 4px solid #c62828;
+                ">⚠️ @errorMessage</div>
+            }
+
+            <div style="margin-bottom: 18px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #444; display: block; margin-bottom: 7px;">
+                    Email Address
+                </label>
+                <input
+                    @bind="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    style="
+                        width: 100%; padding: 13px 16px;
+                        border: 1.5px solid #e8eaf0; border-radius: 10px;
+                        font-size: 0.9rem; outline: none; box-sizing: border-box;
+                        transition: border 0.2s; background: #fafafa;
+                    "
+                    onfocus="this.style.borderColor='#1b5e20'; this.style.background='white'"
+                    onblur="this.style.borderColor='#e8eaf0'; this.style.background='#fafafa'"
+                />
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: 700; font-size: 0.85rem; color: #444; display: block; margin-bottom: 7px;">
+                    Password
+                </label>
+                <div style="position: relative;">
+                    <input
+                        @bind="password"
+                        type="@passwordInputType"
+                        placeholder="Enter your password"
+                        style="
+                            width: 100%; padding: 13px 48px 13px 16px;
+                            border: 1.5px solid #e8eaf0; border-radius: 10px;
+                            font-size: 0.9rem; outline: none; box-sizing: border-box;
+                            background: #fafafa;
+                        "
+                        onfocus="this.style.borderColor='#1b5e20'; this.style.background='white'"
+                        onblur="this.style.borderColor='#e8eaf0'; this.style.background='#fafafa'"
+                    />
+                    <button @onclick="TogglePassword" style="
+                        position: absolute; right: 14px; top: 50%;
+                        transform: translateY(-50%);
+                        background: none; border: none; cursor: pointer;
+                        color: #999; font-size: 0.82rem; font-weight: 600;
+                    ">@passwordToggleText</button>
+                </div>
+            </div>
+
+            <div style="text-align: right; margin-bottom: 24px;">
+                <a href="/forgot-password" style="color: #1b5e20; font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <button @onclick="HandleLogin" disabled="@isLoading" style="
+                width: 100%; padding: 14px;
+                background: linear-gradient(135deg, #1b5e20, #2e7d32);
+                color: white; border: none; border-radius: 10px;
+                font-size: 1rem; font-weight: 700; cursor: pointer;
+                box-shadow: 0 4px 15px rgba(27,94,32,0.35);
+                margin-bottom: 20px;
+            ">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    <span>Signing in...</span>
+                }
+                else
+                {
+                    <span>🔑 Sign In</span>
+                }
+            </button>
+
+            <p style="text-align: center; color: #999; font-size: 0.88rem; margin: 0;">
+                Don't have an account?
+                <a href="/register" style="color: #1b5e20; font-weight: 700; text-decoration: none;">
+                    Create one here
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string errorMessage = string.Empty;
+    private string passwordInputType = "password";
+    private string passwordToggleText = "Show";
+    private bool isLoading = false;
+
+    private void TogglePassword()
+    {
+        passwordInputType = passwordInputType == "password" ? "text" : "password";
+        passwordToggleText = passwordToggleText == "Show" ? "Hide" : "Show";
+    }
+
+    private async Task HandleLogin()
+    {
+        errorMessage = string.Empty;
+        if (string.IsNullOrWhiteSpace(email)) { errorMessage = "Email is required."; return; }
+        if (!email.Contains("@") || !email.Contains(".")) { errorMessage = "Please enter a valid email address."; return; }
+        if (string.IsNullOrWhiteSpace(password)) { errorMessage = "Password is required."; return; }
+
+        isLoading = true;
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/auth/login", new
+            {
+                Email = email,
+                Password = password
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResult>();
+                if (result != null)
+                {
+                    AuthState.Login(result.Token, result.FullName, result.Role, result.UserId);
+                    Navigation.NavigateTo("/");
+                }
+            }
+            else
+            {
+                errorMessage = "Invalid email or password. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    public class AuthResult
+    {
+        public string Token { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+    }
+}

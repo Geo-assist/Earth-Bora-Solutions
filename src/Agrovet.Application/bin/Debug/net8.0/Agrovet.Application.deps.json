@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Agrovet.Application/1.0.0": {
+        "dependencies": {
+          "Agrovet.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Agrovet.Application.dll": {}
+        }
+      },
+      "Agrovet.Domain/1.0.0": {
+        "runtime": {
+          "Agrovet.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Agrovet.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Agrovet.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

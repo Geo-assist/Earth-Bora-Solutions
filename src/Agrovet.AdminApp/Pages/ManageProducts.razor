@@ -1,0 +1,380 @@
+@page "/manage-products"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div style="padding: 8px 0;">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">🌾 Manage Products</h4>
+            <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">Add, edit or remove products from the store</p>
+        </div>
+        <button @onclick="ShowAddForm" style="
+            background: #1b5e20; color: white; border: none;
+            padding: 12px 24px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(27,94,32,0.3);
+        ">+ Add New Product</button>
+    </div>
+
+    <!-- Success/Error Message -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div style="
+            background: #e8f5e9; color: #2e7d32;
+            padding: 12px 20px; border-radius: 10px;
+            font-weight: 600; margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+        ">✅ @successMessage</div>
+    }
+
+    <!-- Add/Edit Form -->
+    @if (showForm)
+    {
+        <div style="
+            background: #1e1e2e; border-radius: 16px;
+            padding: 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 4px solid #1b5e20;
+        ">
+            <h5 style="font-weight: 800; color: #e0e0e0; margin: 0 0 24px;">
+                @(editingProduct == null ? "➕ Add New Product" : "✏️ Edit Product")
+            </h5>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div style="
+                    background: #ffebee; color: #c62828;
+                    padding: 12px 16px; border-radius: 10px;
+                    font-size: 0.88rem; font-weight: 600;
+                    margin-bottom: 20px;
+                ">⚠️ @errorMessage</div>
+            }
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                    <label style="@LabelStyle">Product Name *</label>
+                    <input class="form-control" @bind="productName" placeholder="e.g. Dairy Meal 50kg" style="@InputStyle" />
+                </div>
+                <div>
+                    <label style="@LabelStyle">SKU *</label>
+                    <input class="form-control" @bind="productSku" placeholder="e.g. FEED-001" style="@InputStyle" />
+                </div>
+                <div>
+                    <label style="@LabelStyle">Price (KSh) *</label>
+                    <input type="number" class="form-control" @bind="productPrice" placeholder="0.00" style="@InputStyle" />
+                </div>
+                <div>
+                    <label style="@LabelStyle">Category *</label>
+                    <select class="form-select" @bind="productCategoryId" style="@InputStyle">
+                        <option value="">-- Select Category --</option>
+                        @foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id">@cat.Name</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label style="@LabelStyle">Stock Quantity</label>
+                    <input type="number" class="form-control" @bind="productStock" style="@InputStyle" />
+                </div>
+                <div>
+                    <label style="@LabelStyle">Low Stock Threshold</label>
+                    <input type="number" class="form-control" @bind="productThreshold" style="@InputStyle" />
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="@LabelStyle">Description</label>
+                    <textarea class="form-control" @bind="productDescription" rows="3"
+                        placeholder="Brief product description..." style="@InputStyle resize: none;"></textarea>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button @onclick="SaveProduct" style="
+                    background: #1b5e20; color: white; border: none;
+                    padding: 12px 28px; border-radius: 50px;
+                    font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                ">💾 Save Product</button>
+                <button @onclick="CancelForm" style="
+                    background: #16213e; color: #666; border: none;
+                    padding: 12px 24px; border-radius: 50px;
+                    font-weight: 600; cursor: pointer; font-size: 0.9rem;
+                ">Cancel</button>
+            </div>
+        </div>
+    }
+
+    <!-- Products Table -->
+    <div style="background: #1e1e2e; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;">
+        @if (isLoading)
+        {
+            <div style="text-align: center; padding: 60px;">
+                <div class="spinner-border text-success"></div>
+                <p class="mt-3 text-muted">Loading products...</p>
+            </div>
+        }
+        else if (products.Count == 0)
+        {
+            <div style="text-align: center; padding: 60px; color: #666;">
+                <div style="font-size: 3rem;">🌾</div>
+                <h5 style="margin-top: 12px;">No products yet</h5>
+                <p>Click "Add New Product" to get started</p>
+            </div>
+        }
+        else
+        {
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #16213e; border-bottom: 2px solid #e8eaf0;">
+                        <th style="@ThStyle">#</th>
+                        <th style="@ThStyle">Product</th>
+                        <th style="@ThStyle">SKU</th>
+                        <th style="@ThStyle">Category</th>
+                        <th style="@ThStyle">Price</th>
+                        <th style="@ThStyle">Stock</th>
+                        <th style="@ThStyle">Status</th>
+                        <th style="@ThStyle">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int index = 1; }
+                    @foreach (var product in products)
+                    {
+                        <tr style="border-bottom: 1px solid #2a2a3e;"
+                            onmouseover="this.style.background='#f8fffe'"
+                            onmouseout="this.style.background='white'">
+                            <td style="@TdStyle color: #666; font-weight: 600;">@index</td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 700; color: #e0e0e0;">@product.Name</span>
+                                <p style="margin: 2px 0 0; font-size: 0.75rem; color: #666;">
+                                    @(product.Description.Length > 40 ? product.Description.Substring(0, 40) + "..." : product.Description)
+                                </p>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-family: monospace; color: #666; font-size: 0.82rem; background: #16213e; padding: 3px 8px; border-radius: 6px;">
+                                    @product.SKU
+                                </span>
+                            </td>
+                            <td style="@TdStyle color: #aaa;">@product.CategoryName</td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 900; color: #1b5e20;">KSh @product.Price</span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="font-weight: 800; color: @(product.StockQuantity <= product.LowStockThreshold ? "#e65100" : "#1b5e20");">
+                                    @product.StockQuantity
+                                </span>
+                            </td>
+                            <td style="@TdStyle">
+                                <span style="
+                                    padding: 4px 12px; border-radius: 50px;
+                                    font-size: 0.75rem; font-weight: 700;
+                                    background: @(product.StockQuantity <= product.LowStockThreshold ? "#fff3e0" : "#e8f5e9");
+                                    color: @(product.StockQuantity <= product.LowStockThreshold ? "#e65100" : "#2e7d32");
+                                ">
+                                    @(product.StockQuantity <= product.LowStockThreshold ? "Low Stock" : "In Stock")
+                                </span>
+                            </td>
+                            <td style="@TdStyle">
+                                <div style="display: flex; gap: 8px;">
+                                    <button @onclick="@(() => EditProduct(product))" style="
+                                        background: #e3f2fd; color: #1565c0; border: none;
+                                        padding: 7px 16px; border-radius: 8px;
+                                        font-size: 0.8rem; font-weight: 700; cursor: pointer;
+                                    ">✏️ Edit</button>
+                                    <button @onclick="@(() => DeleteProduct(product.Id))" style="
+                                        background: #ffebee; color: #c62828; border: none;
+                                        padding: 7px 16px; border-radius: 8px;
+                                        font-size: 0.8rem; font-weight: 700; cursor: pointer;
+                                    ">🗑️ Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+
+            <div style="padding: 16px 24px; background: #16213e;">
+                <p style="margin: 0; color: #666; font-size: 0.85rem;">@products.Count products total</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ProductDto> products = new();
+    private List<CategoryDto> categories = new();
+    private bool showForm = false;
+    private bool isLoading = true;
+    private ProductDto? editingProduct = null;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    private string productName = string.Empty;
+    private string productSku = string.Empty;
+    private string productDescription = string.Empty;
+    private decimal productPrice = 0;
+    private int productStock = 0;
+    private int productThreshold = 5;
+    private string productCategoryId = string.Empty;
+
+    private string ThStyle => "padding: 14px 20px; text-align: left; font-size: 0.75rem; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 1px;";
+    private string TdStyle => "padding: 14px 20px; font-size: 0.88rem;";
+    private string LabelStyle => "font-weight: 700; font-size: 0.82rem; color: #aaa; display: block; margin-bottom: 6px;";
+    private string InputStyle => "border-radius: 10px; border: 1.5px solid #2a2a3e; padding: 10px 14px; font-size: 0.9rem;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProducts();
+        await LoadCategories();
+    }
+
+    private async Task LoadProducts()
+    {
+        isLoading = true;
+        try
+        {
+            products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products") ?? new();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task LoadCategories()
+    {
+        try
+        {
+            categories = await Http.GetFromJsonAsync<List<CategoryDto>>("api/categories") ?? new();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void ShowAddForm()
+    {
+        editingProduct = null;
+        productName = string.Empty;
+        productSku = string.Empty;
+        productDescription = string.Empty;
+        productPrice = 0;
+        productStock = 0;
+        productThreshold = 5;
+        productCategoryId = string.Empty;
+        errorMessage = string.Empty;
+        showForm = true;
+    }
+
+    private void EditProduct(ProductDto product)
+    {
+        editingProduct = product;
+        productName = product.Name;
+        productSku = product.SKU;
+        productDescription = product.Description;
+        productPrice = product.Price;
+        productStock = product.StockQuantity;
+        productThreshold = product.LowStockThreshold;
+        productCategoryId = product.CategoryId.ToString();
+        errorMessage = string.Empty;
+        showForm = true;
+    }
+
+    private void CancelForm()
+    {
+        showForm = false;
+        editingProduct = null;
+        errorMessage = string.Empty;
+    }
+
+    private async Task SaveProduct()
+    {
+        errorMessage = string.Empty;
+        if (string.IsNullOrWhiteSpace(productName)) { errorMessage = "Product name is required."; return; }
+        if (string.IsNullOrWhiteSpace(productSku)) { errorMessage = "SKU is required."; return; }
+        if (productPrice <= 0) { errorMessage = "Price must be greater than 0."; return; }
+        if (string.IsNullOrWhiteSpace(productCategoryId)) { errorMessage = "Please select a category."; return; }
+
+        var productData = new
+        {
+            Name = productName,
+            SKU = productSku,
+            Description = productDescription,
+            Price = productPrice,
+            StockQuantity = productStock,
+            LowStockThreshold = productThreshold,
+            CategoryId = Guid.Parse(productCategoryId),
+            ImageUrl = (string?)null,
+            IsActive = true
+        };
+
+        try
+        {
+            if (editingProduct == null)
+            {
+                await Http.PostAsJsonAsync("api/products", productData);
+                successMessage = $"Product '{productName}' added successfully!";
+            }
+            else
+            {
+                await Http.PutAsJsonAsync($"api/products/{editingProduct.Id}", productData);
+                successMessage = $"Product '{productName}' updated successfully!";
+            }
+
+            showForm = false;
+            editingProduct = null;
+            await LoadProducts();
+
+            await Task.Delay(3000);
+            successMessage = string.Empty;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error saving product: {ex.Message}";
+        }
+    }
+
+    private async Task DeleteProduct(Guid id)
+    {
+        try
+        {
+            await Http.DeleteAsync($"api/products/{id}");
+            successMessage = "Product deleted successfully!";
+            await LoadProducts();
+            await Task.Delay(3000);
+            successMessage = string.Empty;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string SKU { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public int StockQuantity { get; set; }
+        public int LowStockThreshold { get; set; }
+        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+    }
+
+    public class CategoryDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+}

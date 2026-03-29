@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+@inject Agrovet.AdminApp.Services.AdminAuthService AuthService
+@inject NavigationManager Navigation
+
+@if (!AuthService.IsLoggedIn && !Navigation.Uri.Contains("/login"))
+{
+    Navigation.NavigateTo("/login");
+}
+else
+{
+    @if (!Navigation.Uri.Contains("/login"))
+    {
+        <NavMenu />
+    }
+    <div style="
+        min-height: 100vh;
+        background: #0f1117;
+        padding: @(Navigation.Uri.Contains("/login") ? "0" : "24px");
+        color: #e0e0e0;
+    ">
+        @Body
+    </div>
+}

@@ -1,0 +1,217 @@
+@page "/cart"
+@inject Agrovet.WebApp.Services.AuthStateService AuthState
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div style="background: #f5f6fa; min-height: calc(100vh - 65px); padding: 32px;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+
+        <div style="margin-bottom: 28px;">
+            <h4 style="font-weight: 900; color: #1a1a2e; margin: 0;">🛒 Shopping Cart</h4>
+            <p style="color: #999; font-size: 0.88rem; margin: 4px 0 0;">
+                @(cartItems == null ? "" : $"{cartItems.Count} item(s) in your cart")
+            </p>
+        </div>
+
+        @if (cartItems == null)
+        {
+            <div style="text-align: center; padding: 80px;">
+                <div class="spinner-border text-success" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3 text-muted">Loading your cart...</p>
+            </div>
+        }
+        else if (cartItems.Count == 0)
+        {
+            <div style="background: white; border-radius: 20px; padding: 80px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+                <div style="font-size: 5rem; margin-bottom: 16px;">🛒</div>
+                <h5 style="font-weight: 800; color: #1a1a2e; margin-bottom: 8px;">Your cart is empty</h5>
+                <p style="color: #999; margin-bottom: 24px;">Browse our products and add items to your cart</p>
+                <button @onclick="@(() => Navigation.NavigateTo("/products"))" style="
+                    background: #1b5e20; color: white; border: none;
+                    padding: 14px 32px; border-radius: 50px;
+                    font-weight: 700; cursor: pointer; font-size: 0.95rem;
+                    box-shadow: 0 4px 15px rgba(27,94,32,0.3);
+                ">🌾 Browse Products</button>
+            </div>
+        }
+        else
+        {
+            <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px;">
+
+                <!-- Cart Items -->
+                <div>
+                    @foreach (var item in cartItems)
+                    {
+                        <div style="
+                            background: white; border-radius: 16px;
+                            padding: 20px 24px; margin-bottom: 16px;
+                            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+                            display: flex; align-items: center; gap: 20px;
+                        ">
+                            <div style="width: 90px; height: 90px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: #e8f5e9;">
+                                <img
+                                    src="@GetProductImage(item.Product?.Name ?? "")"
+                                    alt="@item.Product?.Name"
+                                    style="width: 100%; height: 100%; object-fit: cover;"
+                                    onerror="this.src='https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=200&q=80'"
+                                />
+                            </div>
+
+                            <div style="flex: 1;">
+                                <h6 style="font-weight: 800; color: #1a1a2e; margin: 0 0 4px; font-size: 1rem;">@item.Product?.Name</h6>
+                                <p style="color: #1b5e20; font-weight: 900; font-size: 1.1rem; margin: 0 0 12px;">KSh @item.Product?.Price</p>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="display: flex; align-items: center; border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
+                                        <button @onclick="@(() => UpdateQuantity(item.Id, item.Quantity - 1))" style="background: #f5f5f5; border: none; padding: 8px 14px; cursor: pointer; font-size: 1rem; font-weight: 700; color: #333;">−</button>
+                                        <span style="padding: 8px 16px; font-weight: 800; color: #1a1a2e; min-width: 20px; text-align: center;">@item.Quantity</span>
+                                        <button @onclick="@(() => UpdateQuantity(item.Id, item.Quantity + 1))" style="background: #f5f5f5; border: none; padding: 8px 14px; cursor: pointer; font-size: 1rem; font-weight: 700; color: #333;">+</button>
+                                    </div>
+                                    <button @onclick="@(() => RemoveItem(item.Id))" style="background: #ffebee; color: #c62828; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">🗑️ Remove</button>
+                                </div>
+                            </div>
+
+                            <div style="text-align: right; flex-shrink: 0;">
+                                <p style="color: #999; font-size: 0.78rem; margin: 0 0 4px;">Subtotal</p>
+                                <p style="font-weight: 900; color: #1b5e20; font-size: 1.2rem; margin: 0;">KSh @(item.Quantity * (item.Product?.Price ?? 0))</p>
+                            </div>
+                        </div>
+                    }
+
+                    <button @onclick="@(() => Navigation.NavigateTo("/products"))" style="
+                        background: transparent; color: #1b5e20;
+                        border: 2px solid #1b5e20; padding: 12px 24px;
+                        border-radius: 50px; font-weight: 700; cursor: pointer;
+                        font-size: 0.9rem; margin-top: 8px;
+                    ">← Continue Shopping</button>
+                </div>
+
+                <!-- Order Summary -->
+                <div>
+                    <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 90px;">
+                        <h5 style="font-weight: 800; color: #1a1a2e; margin: 0 0 20px;">Order Summary</h5>
+
+                        @foreach (var item in cartItems)
+                        {
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="color: #666; font-size: 0.85rem;">@item.Product?.Name x@item.Quantity</span>
+                                <span style="font-weight: 600; font-size: 0.85rem;">KSh @(item.Quantity * (item.Product?.Price ?? 0))</span>
+                            </div>
+                        }
+
+                        <hr style="border-color: #f0f0f0; margin: 16px 0;" />
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="color: #999; font-size: 0.88rem;">Subtotal</span>
+                            <span style="font-weight: 700;">KSh @subtotal</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                            <span style="color: #999; font-size: 0.88rem;">Delivery Fee (5%)</span>
+                            <span style="color: #e65100; font-weight: 700;">KSh @deliveryFee</span>
+                        </div>
+
+                        <div style="
+                            background: #f8fffe; border-radius: 12px; padding: 16px; margin-bottom: 20px;
+                            border: 1px solid #e8f5e9; display: flex; justify-content: space-between; align-items: center;
+                        ">
+                            <span style="font-weight: 800; color: #1a1a2e;">Total</span>
+                            <span style="font-weight: 900; color: #1b5e20; font-size: 1.4rem;">KSh @totalAmount</span>
+                        </div>
+
+                        <p style="color: #999; font-size: 0.75rem; margin: 0 0 16px; text-align: center;">
+                            Delivery fee is 5% of your order subtotal
+                        </p>
+
+                        <button @onclick="@(() => Navigation.NavigateTo("/checkout"))" style="
+                            width: 100%; padding: 14px;
+                            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+                            color: white; border: none; border-radius: 12px;
+                            font-weight: 700; cursor: pointer; font-size: 1rem;
+                            box-shadow: 0 4px 15px rgba(27,94,20,0.3); margin-bottom: 10px;
+                        ">Proceed to Checkout →</button>
+
+                        <button @onclick="ClearCart" style="
+                            width: 100%; padding: 12px; background: #ffebee; color: #c62828;
+                            border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+                        ">🗑️ Clear Cart</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<CartItemDto>? cartItems;
+    private decimal subtotal = 0;
+    private decimal deliveryFee = 0;
+    private decimal totalAmount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthState.IsLoggedIn) { Navigation.NavigateTo("/login"); return; }
+        await LoadCart();
+    }
+
+    private async Task LoadCart()
+    {
+        try
+        {
+            cartItems = await Http.GetFromJsonAsync<List<CartItemDto>>($"api/cart/{AuthState.UserId}");
+            CalculateTotals();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            cartItems = new();
+        }
+    }
+
+    private void CalculateTotals()
+    {
+        subtotal = cartItems?.Sum(i => i.Quantity * (i.Product?.Price ?? 0)) ?? 0;
+        deliveryFee = Math.Round(subtotal * 0.05m, 0);
+        totalAmount = subtotal + deliveryFee;
+    }
+
+    private async Task UpdateQuantity(Guid id, int quantity)
+    {
+        await Http.PutAsJsonAsync($"api/cart/{id}", quantity);
+        await LoadCart();
+    }
+
+    private async Task RemoveItem(Guid id)
+    {
+        await Http.DeleteAsync($"api/cart/{id}");
+        await LoadCart();
+    }
+
+    private async Task ClearCart()
+    {
+        await Http.DeleteAsync($"api/cart/clear/{AuthState.UserId}");
+        await LoadCart();
+    }
+
+    private string GetProductImage(string name)
+    {
+        var n = name.ToLower();
+        if (n.Contains("dairy") || n.Contains("cattle")) return "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=200&q=80";
+        if (n.Contains("layer") || n.Contains("mash") || n.Contains("poultry")) return "https://images.unsplash.com/photo-1612170153139-6f881ff067e0?w=200&q=80";
+        if (n.Contains("dip") || n.Contains("pesticide")) return "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=200&q=80";
+        if (n.Contains("amox") || n.Contains("medicine")) return "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=200&q=80";
+        if (n.Contains("hoe") || n.Contains("tool")) return "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=80";
+        return "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=200&q=80";
+    }
+
+    public class CartItemDto
+    {
+        public Guid Id { get; set; }
+        public int Quantity { get; set; }
+        public ProductDto? Product { get; set; }
+    }
+
+    public class ProductDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+    }
+}

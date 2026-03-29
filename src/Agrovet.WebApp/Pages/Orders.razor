@@ -1,0 +1,260 @@
+@page "/orders"
+@inject Agrovet.WebApp.Services.AuthStateService AuthState
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div style="background: #f5f6fa; min-height: calc(100vh - 65px); padding: 32px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;">
+            <div>
+                <h4 style="font-weight: 900; color: #1a1a2e; margin: 0;">📦 My Orders</h4>
+                <p style="color: #999; font-size: 0.88rem; margin: 4px 0 0;">Track and view all your orders</p>
+            </div>
+            <button @onclick="@(() => Navigation.NavigateTo("/products"))" style="
+                background: #1b5e20; color: white; border: none;
+                padding: 10px 22px; border-radius: 50px;
+                font-weight: 700; cursor: pointer; font-size: 0.88rem;
+            ">+ New Order</button>
+        </div>
+
+        @if (orders == null)
+        {
+            <div style="text-align: center; padding: 80px;">
+                <div class="spinner-border text-success" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3 text-muted">Loading your orders...</p>
+            </div>
+        }
+        else if (orders.Count == 0)
+        {
+            <div style="
+                background: white; border-radius: 20px;
+                padding: 80px; text-align: center;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            ">
+                <div style="font-size: 5rem; margin-bottom: 16px;">📦</div>
+                <h5 style="font-weight: 800; color: #1a1a2e; margin-bottom: 8px;">No orders yet</h5>
+                <p style="color: #999; margin-bottom: 24px;">You haven't placed any orders. Start shopping now!</p>
+                <button @onclick="@(() => Navigation.NavigateTo("/products"))" style="
+                    background: #1b5e20; color: white; border: none;
+                    padding: 14px 32px; border-radius: 50px;
+                    font-weight: 700; cursor: pointer; font-size: 0.95rem;
+                    box-shadow: 0 4px 15px rgba(27,94,32,0.3);
+                ">🌾 Start Shopping</button>
+            </div>
+        }
+        else
+        {
+            @foreach (var order in orders)
+            {
+                <div style="
+                    background: white; border-radius: 16px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+                    overflow: hidden;
+                ">
+                    <!-- Order Header -->
+                    <div style="
+                        padding: 18px 24px;
+                        background: #f8fffe;
+                        border-bottom: 1px solid #e8f5e9;
+                        display: flex; justify-content: space-between; align-items: center;
+                        flex-wrap: wrap; gap: 12px;
+                    ">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div>
+                                <p style="font-weight: 900; color: #1b5e20; margin: 0; font-family: monospace; font-size: 1rem;">
+                                    #@order.Id.ToString().Substring(0, 8).ToUpper()
+                                </p>
+                                <p style="color: #999; font-size: 0.78rem; margin: 2px 0 0;">
+                                    @order.OrderedAt.ToString("dd MMMM yyyy, hh:mm tt")
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="
+                                padding: 5px 14px; border-radius: 50px;
+                                font-size: 0.78rem; font-weight: 700;
+                                background: @GetStatusBg(order.Status);
+                                color: @GetStatusColor(order.Status);
+                            ">@order.Status</span>
+                            <span style="
+                                padding: 5px 14px; border-radius: 50px;
+                                font-size: 0.78rem; font-weight: 700;
+                                background: @GetPaymentBg(order.PaymentStatus);
+                                color: @GetPaymentColor(order.PaymentStatus);
+                            ">@order.PaymentStatus</span>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div style="padding: 16px 24px;">
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <div style="
+                                display: flex; justify-content: space-between;
+                                align-items: center; padding: 10px 0;
+                                border-bottom: 1px solid #f5f5f5;
+                            ">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="
+                                        width: 44px; height: 44px; border-radius: 10px;
+                                        background: #e8f5e9; display: flex;
+                                        align-items: center; justify-content: center;
+                                        font-size: 1.3rem; flex-shrink: 0;
+                                    ">🌱</div>
+                                    <div>
+                                        <p style="font-weight: 700; color: #1a1a2e; margin: 0; font-size: 0.9rem;">
+                                            @item.Product?.Name
+                                        </p>
+                                        <p style="color: #999; font-size: 0.78rem; margin: 2px 0 0;">
+                                            @item.Quantity x KSh @item.UnitPrice
+                                        </p>
+                                    </div>
+                                </div>
+                                <span style="font-weight: 800; color: #1b5e20; font-size: 0.95rem;">
+                                    KSh @item.Subtotal
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Order Footer -->
+                    <div style="
+                        padding: 16px 24px;
+                        background: #f8f9fa;
+                        display: flex; justify-content: space-between; align-items: center;
+                        flex-wrap: wrap; gap: 12px;
+                    ">
+                        <div>
+                            @if (!string.IsNullOrEmpty(order.DeliveryAddress))
+                            {
+                                <p style="color: #999; font-size: 0.82rem; margin: 0;">
+                                    📍 @order.DeliveryAddress
+                                </p>
+                            }
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="text-align: right;">
+                                <p style="color: #999; font-size: 0.75rem; margin: 0;">Total Amount</p>
+                                <p style="font-weight: 900; color: #1b5e20; font-size: 1.2rem; margin: 0;">
+                                    KSh @order.TotalAmount
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Progress -->
+                    <div style="padding: 16px 24px; background: white; border-top: 1px solid #f0f0f0;">
+                        <p style="font-size: 0.75rem; font-weight: 800; color: #999; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px;">Order Progress</p>
+                        <div style="display: flex; align-items: center; gap: 0;">
+                            @foreach (var (step, idx) in new[] { "Pending", "Confirmed", "Processing", "Shipped", "Delivered" }.Select((s, i) => (s, i)))
+                            {
+                                bool isActive = GetStepIndex(order.Status) >= idx;
+                                bool isCurrent = order.Status == step;
+                                <div style="display: flex; align-items: center; flex: 1;">
+                                    <div style="
+                                        width: 28px; height: 28px; border-radius: 50%;
+                                        background: @(isActive ? "#1b5e20" : "#e0e0e0");
+                                        display: flex; align-items: center; justify-content: center;
+                                        font-size: 0.7rem; font-weight: 800;
+                                        color: @(isActive ? "white" : "#999");
+                                        flex-shrink: 0;
+                                        border: @(isCurrent ? "3px solid #4caf50" : "none");
+                                    ">@(isActive ? "✓" : (idx + 1).ToString())</div>
+                                    @if (idx < 4)
+                                    {
+                                        <div style="
+                                            flex: 1; height: 3px;
+                                            background: @(GetStepIndex(order.Status) > idx ? "#1b5e20" : "#e0e0e0");
+                                        "></div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 6px;">
+                            @foreach (var step in new[] { "Pending", "Confirmed", "Processing", "Shipped", "Delivered" })
+                            {
+                                <span style="font-size: 0.65rem; color: @(order.Status == step ? "#1b5e20" : "#bbb"); font-weight: @(order.Status == step ? "800" : "400"); flex: 1; text-align: center;">@step</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<OrderDto>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthState.IsLoggedIn) { Navigation.NavigateTo("/login"); return; }
+        try
+        {
+            orders = await Http.GetFromJsonAsync<List<OrderDto>>($"api/orders/user/{AuthState.UserId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            orders = new();
+        }
+    }
+
+    private int GetStepIndex(string status) => status switch
+    {
+        "Pending" => 0,
+        "Confirmed" => 1,
+        "Processing" => 2,
+        "Shipped" => 3,
+        "Delivered" => 4,
+        _ => 0
+    };
+
+    private string GetStatusBg(string s) => s switch {
+        "Confirmed" => "#e3f2fd", "Pending" => "#fff8e1",
+        "Processing" => "#e8eaf6", "Shipped" => "#f3e5f5",
+        "Delivered" => "#e8f5e9", "Cancelled" => "#ffebee", _ => "#f5f5f5"
+    };
+
+    private string GetStatusColor(string s) => s switch {
+        "Confirmed" => "#1565c0", "Pending" => "#f57f17",
+        "Processing" => "#283593", "Shipped" => "#6a1b9a",
+        "Delivered" => "#2e7d32", "Cancelled" => "#c62828", _ => "#666"
+    };
+
+    private string GetPaymentBg(string s) => s switch {
+        "Paid" => "#e8f5e9", "Pending" => "#fff8e1", "Failed" => "#ffebee", _ => "#f5f5f5"
+    };
+
+    private string GetPaymentColor(string s) => s switch {
+        "Paid" => "#2e7d32", "Pending" => "#f57f17", "Failed" => "#c62828", _ => "#666"
+    };
+
+    public class OrderDto
+    {
+        public Guid Id { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string PaymentStatus { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public string DeliveryAddress { get; set; } = string.Empty;
+        public DateTime OrderedAt { get; set; }
+        public List<OrderItemDto> OrderItems { get; set; } = new();
+    }
+
+    public class OrderItemDto
+    {
+        public Guid Id { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Subtotal { get; set; }
+        public ProductDto? Product { get; set; }
+    }
+
+    public class ProductDto
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+}

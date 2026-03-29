@@ -1,0 +1,336 @@
+@page "/reports"
+@inject HttpClient Http
+
+<div style="padding: 8px 0;">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h4 style="font-weight: 900; color: #e0e0e0; margin: 0;">📊 Reports & Analytics</h4>
+            <p style="color: #666; font-size: 0.85rem; margin: 4px 0 0;">Business insights and performance overview</p>
+        </div>
+        <button @onclick="LoadData" style="
+            background: #1b5e20; color: white; border: none;
+            padding: 10px 20px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; font-size: 0.88rem;
+        ">🔄 Refresh</button>
+    </div>
+
+    @if (isLoading)
+    {
+        <div style="text-align: center; padding: 80px; color: #666;">
+            <div class="spinner-border text-success"></div>
+            <p class="mt-3">Loading analytics...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Revenue Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); border-radius: 14px; padding: 22px 24px; box-shadow: 0 4px 20px rgba(27,94,32,0.3);">
+                <p style="font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Total Revenue</p>
+                <h2 style="font-weight: 900; color: white; margin: 0;">KSh @totalRevenue.ToString("N0")</h2>
+                <p style="color: rgba(255,255,255,0.6); font-size: 0.78rem; margin: 6px 0 0;">All time</p>
+            </div>
+            <div style="background: #1e1e2e; border-radius: 14px; padding: 22px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+                <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Total Orders</p>
+                <h2 style="font-weight: 900; color: #64b5f6; margin: 0;">@totalOrders</h2>
+                <p style="color: #666; font-size: 0.78rem; margin: 6px 0 0;">All time</p>
+            </div>
+            <div style="background: #1e1e2e; border-radius: 14px; padding: 22px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+                <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Avg Order Value</p>
+                <h2 style="font-weight: 900; color: #ffa726; margin: 0;">KSh @avgOrderValue.ToString("N0")</h2>
+                <p style="color: #666; font-size: 0.78rem; margin: 6px 0 0;">Per order</p>
+            </div>
+            <div style="background: #1e1e2e; border-radius: 14px; padding: 22px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+                <p style="font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Delivered Orders</p>
+                <h2 style="font-weight: 900; color: #4caf50; margin: 0;">@deliveredOrders</h2>
+                <p style="color: #666; font-size: 0.78rem; margin: 6px 0 0;">Successfully completed</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+
+            <!-- Order Status Breakdown -->
+            <div style="background: #1e1e2e; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+                <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 20px;">📦 Order Status Breakdown</h6>
+                @foreach (var stat in orderStatusStats)
+                {
+                    <div style="margin-bottom: 14px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.85rem; color: #ccc; font-weight: 600;">@stat.Label</span>
+                            <span style="font-size: 0.85rem; color: @stat.Color; font-weight: 800;">@stat.Count (@stat.Percent%)</span>
+                        </div>
+                        <div style="background: #2a2a3e; border-radius: 50px; height: 8px; overflow: hidden;">
+                            <div style="width: @stat.Percent%; background: @stat.Color; height: 100%; border-radius: 50px; transition: width 0.5s;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Top Products -->
+            <div style="background: #1e1e2e; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+                <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 20px;">🌾 Top Selling Products</h6>
+                @if (topProducts.Count == 0)
+                {
+                    <div style="text-align: center; padding: 30px; color: #666;">
+                        <p>No sales data yet</p>
+                    </div>
+                }
+                else
+                {
+                    
+                    @for (int rank = 1; rank <= topProducts.Count; rank++) { var product = topProducts[rank - 1];
+                    {
+                        <div style="
+                            display: flex; justify-content: space-between; align-items: center;
+                            padding: 12px 0; border-bottom: 1px solid #2a2a3e;
+                        ">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="
+                                    width: 28px; height: 28px; border-radius: 50%;
+                                    background: @GetRankColor(rank);
+                                    display: flex; align-items: center; justify-content: center;
+                                    font-weight: 900; font-size: 0.78rem; color: white;
+                                ">@rank</div>
+                                <div>
+                                    <p style="font-weight: 700; color: #e0e0e0; margin: 0; font-size: 0.88rem;">@product.Name</p>
+                                    <p style="color: #666; font-size: 0.75rem; margin: 2px 0 0;">@product.TotalSold units sold</p>
+                                </div>
+                            </div>
+                            <span style="font-weight: 900; color: #4caf50; font-size: 0.9rem;">KSh @product.TotalRevenue.ToString("N0")</span>
+                        </div>
+}
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- Monthly Revenue Table -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); margin-bottom: 24px;">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 20px;">📅 Monthly Revenue Breakdown</h6>
+            @if (monthlyStats.Count == 0)
+            {
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    <p>No data available yet</p>
+                </div>
+            }
+            else
+            {
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #2a2a3e;">
+                            <th style="@ThStyle">Month</th>
+                            <th style="@ThStyle">Orders</th>
+                            <th style="@ThStyle">Revenue</th>
+                            <th style="@ThStyle">Avg Order</th>
+                            <th style="@ThStyle">Revenue Bar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var month in monthlyStats)
+                        {
+                            <tr style="border-bottom: 1px solid #2a2a3e;"
+                                onmouseover="this.style.background='#16213e'"
+                                onmouseout="this.style.background='transparent'">
+                                <td style="@TdStyle font-weight: 700; color: #e0e0e0;">@month.Month</td>
+                                <td style="@TdStyle color: #64b5f6; font-weight: 700;">@month.OrderCount</td>
+                                <td style="@TdStyle color: #4caf50; font-weight: 900;">KSh @month.Revenue.ToString("N0")</td>
+                                <td style="@TdStyle color: #ffa726; font-weight: 700;">KSh @month.AvgOrder.ToString("N0")</td>
+                                <td style="@TdStyle">
+                                    <div style="background: #2a2a3e; border-radius: 50px; height: 8px; width: 150px; overflow: hidden;">
+                                        <div style="width: @month.BarWidth%; background: #4caf50; height: 100%; border-radius: 50px;"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- Recent Customers -->
+        <div style="background: #1e1e2e; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
+            <h6 style="font-weight: 800; color: #e0e0e0; margin: 0 0 20px;">👥 Recent Customer Registrations</h6>
+            @if (recentCustomers.Count == 0)
+            {
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    <p>No customers yet</p>
+                </div>
+            }
+            else
+            {
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;">
+                    @foreach (var customer in recentCustomers)
+                    {
+                        <div style="background: #16213e; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                            <div style="
+                                width: 40px; height: 40px; border-radius: 50%;
+                                background: linear-gradient(135deg, #1b5e20, #4caf50);
+                                display: flex; align-items: center; justify-content: center;
+                                color: white; font-weight: 900; font-size: 1rem; flex-shrink: 0;
+                            ">@customer.FullName.Substring(0, 1).ToUpper()</div>
+                            <div>
+                                <p style="font-weight: 700; color: #e0e0e0; margin: 0; font-size: 0.88rem;">@customer.FullName</p>
+                                <p style="color: #666; font-size: 0.75rem; margin: 2px 0 0;">@customer.CreatedAt.ToString("dd MMM yyyy")</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool isLoading = true;
+    private decimal totalRevenue = 0;
+    private int totalOrders = 0;
+    private decimal avgOrderValue = 0;
+    private int deliveredOrders = 0;
+    private List<StatusStat> orderStatusStats = new();
+    private List<ProductStat> topProducts = new();
+    private List<MonthlyStat> monthlyStats = new();
+    private List<CustomerDto> recentCustomers = new();
+
+    private string ThStyle => "padding: 12px 16px; text-align: left; font-size: 0.75rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px;";
+    private string TdStyle => "padding: 12px 16px; font-size: 0.88rem;";
+
+    protected override async Task OnInitializedAsync() => await LoadData();
+
+    private async Task LoadData()
+    {
+        isLoading = true;
+        try
+        {
+            var orders = await Http.GetFromJsonAsync<List<OrderDto>>("api/orders") ?? new();
+            var customers = await Http.GetFromJsonAsync<List<CustomerDto>>("api/auth/users") ?? new();
+
+            totalOrders = orders.Count;
+            totalRevenue = orders.Where(o => o.Status != "Cancelled").Sum(o => o.TotalAmount);
+            avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+            deliveredOrders = orders.Count(o => o.Status == "Delivered");
+
+            // Status breakdown
+            var statuses = new[] {
+                ("Delivered", "#4caf50"),
+                ("Confirmed", "#64b5f6"),
+                ("Pending", "#ffa726"),
+                ("Processing", "#7986cb"),
+                ("Shipped", "#ba68c8"),
+                ("Cancelled", "#ef5350")
+            };
+
+            orderStatusStats = statuses.Select(s => new StatusStat
+            {
+                Label = s.Item1,
+                Color = s.Item2,
+                Count = orders.Count(o => o.Status == s.Item1),
+                Percent = totalOrders > 0 ? (int)((double)orders.Count(o => o.Status == s.Item1) / totalOrders * 100) : 0
+            }).Where(s => s.Count > 0).ToList();
+
+            // Top products from order items
+            var allItems = orders.SelectMany(o => o.OrderItems).ToList();
+            topProducts = allItems
+                .GroupBy(i => i.ProductName)
+                .Select(g => new ProductStat
+                {
+                    Name = g.Key,
+                    TotalSold = g.Sum(i => i.Quantity),
+                    TotalRevenue = g.Sum(i => i.Subtotal)
+                })
+                .OrderByDescending(p => p.TotalRevenue)
+                .Take(5)
+                .ToList();
+
+            // Monthly stats
+            var monthly = orders
+                .Where(o => o.Status != "Cancelled")
+                .GroupBy(o => new { o.OrderedAt.Year, o.OrderedAt.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Revenue = g.Sum(o => o.TotalAmount),
+                    Count = g.Count()
+                })
+                .OrderByDescending(g => g.Year).ThenByDescending(g => g.Month)
+                .Take(6)
+                .ToList();
+
+            var maxRevenue = monthly.Any() ? monthly.Max(m => m.Revenue) : 1;
+            monthlyStats = monthly.Select(m => new MonthlyStat
+            {
+                Month = new DateTime(m.Year, m.Month, 1).ToString("MMMM yyyy"),
+                OrderCount = m.Count,
+                Revenue = m.Revenue,
+                AvgOrder = m.Count > 0 ? m.Revenue / m.Count : 0,
+                BarWidth = (int)(m.Revenue / maxRevenue * 100)
+            }).ToList();
+
+            recentCustomers = customers.OrderByDescending(c => c.CreatedAt).Take(8).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string GetRankColor(int rank) => rank switch
+    {
+        1 => "#ffd700",
+        2 => "#c0c0c0",
+        3 => "#cd7f32",
+        _ => "#4caf50"
+    };
+
+    public class OrderDto
+    {
+        public Guid Id { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public DateTime OrderedAt { get; set; }
+        public List<OrderItemDto> OrderItems { get; set; } = new();
+    }
+
+    public class OrderItemDto
+    {
+        public string ProductName { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public decimal Subtotal { get; set; }
+    }
+
+    public class CustomerDto
+    {
+        public string FullName { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class StatusStat
+    {
+        public string Label { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public int Count { get; set; }
+        public int Percent { get; set; }
+    }
+
+    public class ProductStat
+    {
+        public string Name { get; set; } = string.Empty;
+        public int TotalSold { get; set; }
+        public decimal TotalRevenue { get; set; }
+    }
+
+    public class MonthlyStat
+    {
+        public string Month { get; set; } = string.Empty;
+        public int OrderCount { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal AvgOrder { get; set; }
+        public int BarWidth { get; set; }
+    }
+}

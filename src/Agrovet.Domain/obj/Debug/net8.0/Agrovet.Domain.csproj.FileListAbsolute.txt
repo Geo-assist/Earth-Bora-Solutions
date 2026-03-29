@@ -1,0 +1,11 @@
+/home/george/Agrovet/src/Agrovet.Domain/bin/Debug/net8.0/Agrovet.Domain.deps.json
+/home/george/Agrovet/src/Agrovet.Domain/bin/Debug/net8.0/Agrovet.Domain.dll
+/home/george/Agrovet/src/Agrovet.Domain/bin/Debug/net8.0/Agrovet.Domain.pdb
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.AssemblyInfoInputs.cache
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.AssemblyInfo.cs
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.csproj.CoreCompileInputs.cache
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.dll
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/refint/Agrovet.Domain.dll
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.pdb
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/ref/Agrovet.Domain.dll

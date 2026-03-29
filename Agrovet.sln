@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B525B4D9-A772-407E-B1D4-A8973F2AD45F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.Domain", "src\Agrovet.Domain\Agrovet.Domain.csproj", "{5EC6E470-40CB-4AE8-A7A1-70606CABF699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.Application", "src\Agrovet.Application\Agrovet.Application.csproj", "{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.Infrastructure", "src\Agrovet.Infrastructure\Agrovet.Infrastructure.csproj", "{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.API", "src\Agrovet.API\Agrovet.API.csproj", "{5744C486-BA61-4793-B069-DBE73ED45398}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.WebApp", "src\Agrovet.WebApp\Agrovet.WebApp.csproj", "{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agrovet.AdminApp", "src\Agrovet.AdminApp\Agrovet.AdminApp.csproj", "{929FBC57-B017-4CA9-9939-642F66FE57AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EC6E470-40CB-4AE8-A7A1-70606CABF699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EC6E470-40CB-4AE8-A7A1-70606CABF699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EC6E470-40CB-4AE8-A7A1-70606CABF699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EC6E470-40CB-4AE8-A7A1-70606CABF699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5744C486-BA61-4793-B069-DBE73ED45398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5744C486-BA61-4793-B069-DBE73ED45398}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5744C486-BA61-4793-B069-DBE73ED45398}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5744C486-BA61-4793-B069-DBE73ED45398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{929FBC57-B017-4CA9-9939-642F66FE57AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929FBC57-B017-4CA9-9939-642F66FE57AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929FBC57-B017-4CA9-9939-642F66FE57AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929FBC57-B017-4CA9-9939-642F66FE57AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5EC6E470-40CB-4AE8-A7A1-70606CABF699} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+		{2C5C9A18-887B-4FF4-B1B7-34CF0DAE16D6} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+		{05DFEE3C-3CEE-40FC-8D0C-ED8A8FE5A219} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+		{5744C486-BA61-4793-B069-DBE73ED45398} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+		{5DFCBADE-6F77-4B02-B7E9-F0B9B9D01738} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+		{929FBC57-B017-4CA9-9939-642F66FE57AA} = {B525B4D9-A772-407E-B1D4-A8973F2AD45F}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,89 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Agrovet.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Agrovet.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Agrovet.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Agrovet.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Agrovet.Domain/Agrovet.Domain.csproj",
+      "msbuildProject": "../Agrovet.Domain/Agrovet.Domain.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Agrovet.Domain >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/george/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/george/Agrovet/src/Agrovet.Application/Agrovet.Application.csproj",
+      "projectName": "Agrovet.Application",
+      "projectPath": "/home/george/Agrovet/src/Agrovet.Application/Agrovet.Application.csproj",
+      "packagesPath": "/home/george/.nuget/packages/",
+      "outputPath": "/home/george/Agrovet/src/Agrovet.Application/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/george/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "/home/george/Agrovet/src/Agrovet.Domain/Agrovet.Domain.csproj": {
+              "projectPath": "/home/george/Agrovet/src/Agrovet.Domain/Agrovet.Domain.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.125/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

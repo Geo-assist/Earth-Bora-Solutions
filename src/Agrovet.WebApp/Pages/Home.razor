@@ -1,0 +1,388 @@
+@page "/"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject Agrovet.WebApp.Services.AuthStateService AuthState
+
+<!-- Hero Section with Farm Background -->
+<div style="
+    position: relative;
+    min-height: 100vh;
+    margin: -16px -16px 0 -16px;
+    background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+">
+    <!-- Dark green overlay -->
+    <div style="
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 30, 0, 0.55);
+        backdrop-filter: brightness(0.9);
+    "></div>
+
+    <!-- Hero Content -->
+    <div style="position: relative; z-index: 1; color: white; padding: 60px 30px; max-width: 800px;">
+        <div style="
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            padding: 8px 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        ">
+            🌿 Kenya's Premier Farm Input Store
+        </div>
+
+        <h1 style="
+            font-size: 4rem;
+            font-weight: 900;
+            text-shadow: 2px 4px 12px rgba(0,0,0,0.6);
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        ">
+            Quality Farm Inputs<br/>
+            <span style="color: #69f0ae;">Delivered to You</span>
+        </h1>
+
+        <p style="
+            font-size: 1.25rem;
+            max-width: 580px;
+            margin: 0 auto 36px;
+            opacity: 0.88;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+            line-height: 1.7;
+        ">
+            From animal feeds to veterinary medicine, pesticides to farm tools —
+            everything your farm needs in one place.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            @if (AuthState.IsLoggedIn)
+            {
+                <button @onclick="GoToProducts" style="
+                    background: #4caf50;
+                    color: white;
+                    border: none;
+                    padding: 16px 40px;
+                    border-radius: 50px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 6px 20px rgba(76,175,80,0.5);
+                    letter-spacing: 0.5px;
+                ">
+                    🛒 Shop Now
+                </button>
+                <button @onclick="GoToOrders" style="
+                    background: transparent;
+                    color: white;
+                    border: 2px solid rgba(255,255,255,0.8);
+                    padding: 16px 40px;
+                    border-radius: 50px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    backdrop-filter: blur(10px);
+                    letter-spacing: 0.5px;
+                ">
+                    📦 My Orders
+                </button>
+            }
+            else
+            {
+                <button @onclick="GoToRegister" style="
+                    background: #4caf50;
+                    color: white;
+                    border: none;
+                    padding: 16px 40px;
+                    border-radius: 50px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 6px 20px rgba(76,175,80,0.5);
+                    letter-spacing: 0.5px;
+                ">
+                    🚀 Get Started
+                </button>
+                <button @onclick="GoToLogin" style="
+                    background: transparent;
+                    color: white;
+                    border: 2px solid rgba(255,255,255,0.8);
+                    padding: 16px 40px;
+                    border-radius: 50px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    backdrop-filter: blur(10px);
+                    letter-spacing: 0.5px;
+                ">
+                    🔑 Login
+                </button>
+            }
+        </div>
+
+        <div style="margin-top: 60px; opacity: 0.6; font-size: 0.9rem; letter-spacing: 2px;">
+            ↓ SCROLL TO EXPLORE
+        </div>
+    </div>
+</div>
+
+<!-- Stats Bar -->
+<div style="background: #1b5e20;" class="py-4">
+    <div class="container">
+        <div class="row text-center text-white">
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <h2 style="font-size: 2.2rem; font-weight: 900; color: #69f0ae;">@totalProducts+</h2>
+                <p class="mb-0 opacity-75 small text-uppercase letter-spacing-1">Products</p>
+            </div>
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <h2 style="font-size: 2.2rem; font-weight: 900; color: #69f0ae;">@totalCategories+</h2>
+                <p class="mb-0 opacity-75 small text-uppercase">Categories</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h2 style="font-size: 2.2rem; font-weight: 900; color: #69f0ae;">24/7</h2>
+                <p class="mb-0 opacity-75 small text-uppercase">Online Shopping</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h2 style="font-size: 2.2rem; font-weight: 900; color: #69f0ae;">M-Pesa</h2>
+                <p class="mb-0 opacity-75 small text-uppercase">Easy Payments</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 style="font-weight: 900; font-size: 2rem;">🌟 Featured Products</h2>
+        <p class="text-muted">Handpicked quality products for your farm</p>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status"></div>
+            <p class="mt-3 text-muted">Loading products...</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-warning text-center rounded-4">
+            ⚠️ @errorMessage
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var product in featuredProducts)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0" style="
+                        border-radius: 20px;
+                        overflow: hidden;
+                        box-shadow: 0 6px 25px rgba(0,0,0,0.09);
+                    ">
+                        <div style="
+                            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+                            height: 160px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 4.5rem;
+                        ">🌱</div>
+                        <div class="card-body p-4">
+                            <h5 style="font-weight: 800;">@product.Name</h5>
+                            <p class="text-muted small mb-3">@product.Description</p>
+                            <p style="color: #2e7d32; font-size: 1.5rem; font-weight: 900; margin-bottom: 0;">
+                                KSh @product.Price
+                            </p>
+                        </div>
+                        <div class="card-footer border-0 bg-white p-4 pt-0">
+                            @if (AuthState.IsLoggedIn)
+                            {
+                                <button class="btn btn-success w-100" style="border-radius: 50px; font-weight: 600;" @onclick="GoToProducts">
+                                    🛒 Add to Cart
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-success w-100" style="border-radius: 50px; font-weight: 600;" @onclick="GoToLogin">
+                                    Login to Buy
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <button @onclick="GoToProducts" style="
+                background: #2e7d32;
+                color: white;
+                border: none;
+                padding: 16px 45px;
+                border-radius: 50px;
+                font-size: 1rem;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 6px 20px rgba(46,125,50,0.35);
+                letter-spacing: 0.5px;
+            ">
+                View All Products →
+            </button>
+        </div>
+    }
+</div>
+
+<!-- Why Choose Us -->
+<div style="background: #f1f8e9;" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-weight: 900; font-size: 2rem;">Why Choose Earth Bora Solutions?</h2>
+            <p class="text-muted">We are committed to supporting Kenyan farmers</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div style="
+                        width: 90px; height: 90px;
+                        background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+                        border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 2.2rem;
+                        margin: 0 auto 20px;
+                        box-shadow: 0 4px 15px rgba(102,187,106,0.4);
+                    ">🚚</div>
+                    <h5 style="font-weight: 800;">Fast Delivery</h5>
+                    <p class="text-muted">Quick delivery to your farm or doorstep across Kenya</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div style="
+                        width: 90px; height: 90px;
+                        background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+                        border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 2.2rem;
+                        margin: 0 auto 20px;
+                        box-shadow: 0 4px 15px rgba(102,187,106,0.4);
+                    ">✅</div>
+                    <h5 style="font-weight: 800;">Certified Products</h5>
+                    <p class="text-muted">All products are genuine, certified and quality assured</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div style="
+                        width: 90px; height: 90px;
+                        background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+                        border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 2.2rem;
+                        margin: 0 auto 20px;
+                        box-shadow: 0 4px 15px rgba(102,187,106,0.4);
+                    ">📱</div>
+                    <h5 style="font-weight: 800;">M-Pesa Payments</h5>
+                    <p class="text-muted">Safe and convenient mobile money payments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer style="background: #1a1a2e; color: white;" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 style="color: #69f0ae; font-weight: 800; font-size: 1.2rem;">🌿 Earth Bora Solutions</h5>
+                <p class="opacity-75">Your trusted partner for quality farm inputs and veterinary products in Kenya.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6 style="color: #69f0ae; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Quick Links</h6>
+                <ul class="list-unstyled opacity-75">
+                    <li class="mb-1"><a href="/" style="color: white; text-decoration: none;">Home</a></li>
+                    <li class="mb-1"><a href="/products" style="color: white; text-decoration: none;">Products</a></li>
+                    <li class="mb-1"><a href="/register" style="color: white; text-decoration: none;">Register</a></li>
+                    <li class="mb-1"><a href="/login" style="color: white; text-decoration: none;">Login</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6 style="color: #69f0ae; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Contact Us</h6>
+                <ul class="list-unstyled opacity-75">
+                    <li class="mb-1">📞 0712 345 678</li>
+                    <li class="mb-1">📧 info@earthbora.co.ke</li>
+                    <li class="mb-1">📍 Nakuru, Kenya</li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.1);" />
+        <p class="text-center opacity-50 mb-0 small">© 2026 Earth Bora Solutions. All rights reserved.</p>
+    </div>
+</footer>
+
+@code {
+    private List<ProductDto> featuredProducts = new();
+    private bool isLoading = true;
+    private string errorMessage = string.Empty;
+    private int totalProducts = 0;
+    private int totalCategories = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFeaturedProducts();
+    }
+
+    private async Task LoadFeaturedProducts()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+            var categories = await Http.GetFromJsonAsync<List<object>>("api/categories");
+
+            if (products != null)
+            {
+                totalProducts = products.Count;
+                featuredProducts = products.Take(3).ToList();
+            }
+
+            if (categories != null)
+                totalCategories = categories.Count;
+        }
+        catch (Exception)
+        {
+            errorMessage = "Could not load products. Please check your connection.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void GoToProducts() => Navigation.NavigateTo("/products");
+    private void GoToOrders() => Navigation.NavigateTo("/orders");
+    private void GoToLogin() => Navigation.NavigateTo("/login");
+    private void GoToRegister() => Navigation.NavigateTo("/register");
+
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+    }
+}

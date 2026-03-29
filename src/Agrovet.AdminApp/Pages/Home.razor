@@ -1,0 +1,322 @@
+@page "/"
+@inject HttpClient Http
+
+<div style="padding: 8px 0;">
+
+    <!-- Welcome Header -->
+    <div style="
+        background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(27,94,32,0.3);
+    ">
+        <div>
+            <h4 style="color: white; font-weight: 900; margin: 0; font-size: 1.4rem;">
+                👋 Welcome back, Admin!
+            </h4>
+            <p style="color: rgba(255,255,255,0.75); margin: 6px 0 0; font-size: 0.9rem;">
+                @DateTime.Now.ToString("dddd, dd MMMM yyyy") — Here is your store overview
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin: 0;">Last updated</p>
+            <p style="color: white; font-weight: 700; margin: 4px 0 0;">@DateTime.Now.ToString("hh:mm tt")</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+
+        <div style="@CardStyle" @onclick="@(() => Navigate("/manage-products"))">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p style="@LabelStyle">Total Products</p>
+                    @if (isLoading)
+                    {
+                        <div class="spinner-border spinner-border-sm text-success"></div>
+                    }
+                    else
+                    {
+                        <h2 style="font-weight: 900; color: #1b5e20; margin: 4px 0;">@totalProducts</h2>
+                    }
+                    <p style="font-size: 0.78rem; color: #4caf50; margin: 4px 0 0; font-weight: 600;">View all →</p>
+                </div>
+                <div style="@IconBg("#e8f5e9")">🌾</div>
+            </div>
+        </div>
+
+        <div style="@CardStyle" @onclick="@(() => Navigate("/admin-orders"))">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p style="@LabelStyle">Total Orders</p>
+                    @if (isLoading)
+                    {
+                        <div class="spinner-border spinner-border-sm text-primary"></div>
+                    }
+                    else
+                    {
+                        <h2 style="font-weight: 900; color: #1565c0; margin: 4px 0;">@totalOrders</h2>
+                    }
+                    <p style="font-size: 0.78rem; color: #1976d2; margin: 4px 0 0; font-weight: 600;">View all →</p>
+                </div>
+                <div style="@IconBg("#e3f2fd")">🧾</div>
+            </div>
+        </div>
+
+        <div style="@CardStyle" @onclick="@(() => Navigate("/inventory"))">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p style="@LabelStyle">Low Stock Items</p>
+                    @if (isLoading)
+                    {
+                        <div class="spinner-border spinner-border-sm text-warning"></div>
+                    }
+                    else
+                    {
+                        <h2 style="font-weight: 900; color: @(lowStockCount > 0 ? "#e65100" : "#1b5e20"); margin: 4px 0;">@lowStockCount</h2>
+                    }
+                    <p style="font-size: 0.78rem; color: #ef6c00; margin: 4px 0 0; font-weight: 600;">
+                        @(lowStockCount > 0 ? "Needs attention!" : "All good ✅")
+                    </p>
+                </div>
+                <div style="@IconBg("#fff3e0")">⚠️</div>
+            </div>
+        </div>
+
+        <div style="@CardStyle" @onclick="@(() => Navigate("/customers"))">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <p style="@LabelStyle">Total Customers</p>
+                    @if (isLoading)
+                    {
+                        <div class="spinner-border spinner-border-sm text-purple"></div>
+                    }
+                    else
+                    {
+                        <h2 style="font-weight: 900; color: #6a1b9a; margin: 4px 0;">@totalCustomers</h2>
+                    }
+                    <p style="font-size: 0.78rem; color: #7b1fa2; margin: 4px 0 0; font-weight: 600;">View all →</p>
+                </div>
+                <div style="@IconBg("#f3e5f5")">👥</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row Stats -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div style="@CardStyle">
+            <p style="@LabelStyle">Pending Orders</p>
+            <h2 style="font-weight: 900; color: #f57f17; margin: 4px 0;">@pendingOrders</h2>
+            <p style="font-size: 0.78rem; color: #f9a825; margin: 4px 0 0; font-weight: 600;">Awaiting processing</p>
+        </div>
+        <div style="@CardStyle">
+            <p style="@LabelStyle">Confirmed Orders</p>
+            <h2 style="font-weight: 900; color: #1b5e20; margin: 4px 0;">@confirmedOrders</h2>
+            <p style="font-size: 0.78rem; color: #4caf50; margin: 4px 0 0; font-weight: 600;">Successfully processed</p>
+        </div>
+        <div style="@CardStyle">
+            <p style="@LabelStyle">Total Categories</p>
+            <h2 style="font-weight: 900; color: #1565c0; margin: 4px 0;">@totalCategories</h2>
+            <p style="font-size: 0.78rem; color: #1976d2; margin: 4px 0 0; font-weight: 600;">Product categories</p>
+        </div>
+    </div>
+
+    <!-- Recent Orders & Low Stock -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+        <!-- Recent Orders -->
+        <div style="background: #1e1e2e; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #2a2a3e; display: flex; justify-content: space-between; align-items: center;">
+                <h6 style="font-weight: 800; margin: 0; color: #e0e0e0;">🧾 Recent Orders</h6>
+                <button @onclick="@(() => Navigate("/admin-orders"))" style="
+                    background: #e8f5e9; color: #1b5e20; border: none;
+                    padding: 6px 14px; border-radius: 50px;
+                    font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                ">View All</button>
+            </div>
+            @if (recentOrders.Count == 0)
+            {
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <div style="font-size: 2rem;">🧾</div>
+                    <p style="margin-top: 8px;">No orders yet</p>
+                </div>
+            }
+            else
+            {
+                <div style="padding: 8px 0;">
+                    @foreach (var order in recentOrders)
+                    {
+                        <div style="
+                            padding: 14px 24px;
+                            border-bottom: 1px solid #f8f8f8;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        ">
+                            <div>
+                                <p style="font-weight: 700; margin: 0; font-size: 0.88rem; color: #e0e0e0;">
+                                    Order #@order.Id.ToString().Substring(0, 8).ToUpper()
+                                </p>
+                                <p style="margin: 2px 0 0; font-size: 0.78rem; color: #666;">
+                                    @order.CreatedAt.ToString("dd MMM yyyy")
+                                </p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-weight: 800; margin: 0; color: #1b5e20; font-size: 0.9rem;">
+                                    KSh @order.TotalAmount
+                                </p>
+                                <span style="
+                                    font-size: 0.72rem; padding: 3px 10px; border-radius: 50px; font-weight: 700;
+                                    background: @GetStatusBg(order.Status);
+                                    color: @GetStatusColor(order.Status);
+                                ">@order.Status</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Low Stock Products -->
+        <div style="background: #1e1e2e; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #2a2a3e; display: flex; justify-content: space-between; align-items: center;">
+                <h6 style="font-weight: 800; margin: 0; color: #e0e0e0;">⚠️ Low Stock Alert</h6>
+                <button @onclick="@(() => Navigate("/inventory"))" style="
+                    background: #fff3e0; color: #e65100; border: none;
+                    padding: 6px 14px; border-radius: 50px;
+                    font-size: 0.78rem; font-weight: 700; cursor: pointer;
+                ">View All</button>
+            </div>
+            @if (lowStockProducts.Count == 0)
+            {
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <div style="font-size: 2rem;">✅</div>
+                    <p style="margin-top: 8px;">All products well stocked!</p>
+                </div>
+            }
+            else
+            {
+                <div style="padding: 8px 0;">
+                    @foreach (var product in lowStockProducts)
+                    {
+                        <div style="
+                            padding: 14px 24px;
+                            border-bottom: 1px solid #f8f8f8;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        ">
+                            <div>
+                                <p style="font-weight: 700; margin: 0; font-size: 0.88rem; color: #e0e0e0;">@product.Name</p>
+                                <p style="margin: 2px 0 0; font-size: 0.78rem; color: #666;">@product.CategoryName</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="
+                                    font-size: 0.78rem; padding: 4px 12px; border-radius: 50px; font-weight: 700;
+                                    background: #ffebee; color: #c62828;
+                                ">@product.StockQuantity left</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalProducts = 0;
+    private int totalOrders = 0;
+    private int lowStockCount = 0;
+    private int totalCustomers = 0;
+    private int pendingOrders = 0;
+    private int confirmedOrders = 0;
+    private int totalCategories = 0;
+    private bool isLoading = true;
+    private List<OrderDto> recentOrders = new();
+    private List<ProductDto> lowStockProducts = new();
+
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private string CardStyle => "background: #1e1e2e; border-radius: 14px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s;";
+    private string LabelStyle => "font-size: 0.78rem; font-weight: 800; color: #666; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;";
+    private string IconBg(string color) => $"width: 48px; height: 48px; background: {color}; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDashboard();
+    }
+
+    private async Task LoadDashboard()
+    {
+        isLoading = true;
+        try
+        {
+            var products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+            totalProducts = products?.Count ?? 0;
+            lowStockProducts = products?.Where(p => p.StockQuantity <= p.LowStockThreshold).Take(5).ToList() ?? new();
+            lowStockCount = lowStockProducts.Count;
+
+            var orders = await Http.GetFromJsonAsync<List<OrderDto>>("api/orders");
+            totalOrders = orders?.Count ?? 0;
+            pendingOrders = orders?.Count(o => o.Status == "Pending") ?? 0;
+            confirmedOrders = orders?.Count(o => o.Status == "Confirmed") ?? 0;
+            recentOrders = orders?.OrderByDescending(o => o.CreatedAt).Take(5).ToList() ?? new();
+
+            var customers = await Http.GetFromJsonAsync<List<object>>("api/auth/users");
+            totalCustomers = customers?.Count ?? 0;
+
+            var categories = await Http.GetFromJsonAsync<List<object>>("api/categories");
+            totalCategories = categories?.Count ?? 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Dashboard error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void Navigate(string url) => Navigation.NavigateTo(url);
+
+    private string GetStatusBg(string status) => status switch
+    {
+        "Confirmed" => "#e8f5e9",
+        "Pending" => "#fff8e1",
+        "Delivered" => "#e3f2fd",
+        "Cancelled" => "#ffebee",
+        _ => "#f5f5f5"
+    };
+
+    private string GetStatusColor(string status) => status switch
+    {
+        "Confirmed" => "#2e7d32",
+        "Pending" => "#f57f17",
+        "Delivered" => "#1565c0",
+        "Cancelled" => "#c62828",
+        _ => "#666"
+    };
+
+    public class OrderDto
+    {
+        public Guid Id { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string CategoryName { get; set; } = string.Empty;
+        public int StockQuantity { get; set; }
+        public int LowStockThreshold { get; set; }
+    }
+}

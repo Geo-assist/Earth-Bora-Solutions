@@ -1,0 +1,15 @@
+/home/george/Agrovet/src/Agrovet.Application/bin/Debug/net8.0/Agrovet.Application.deps.json
+/home/george/Agrovet/src/Agrovet.Application/bin/Debug/net8.0/Agrovet.Application.dll
+/home/george/Agrovet/src/Agrovet.Application/bin/Debug/net8.0/Agrovet.Application.pdb
+/home/george/Agrovet/src/Agrovet.Application/bin/Debug/net8.0/Agrovet.Domain.dll
+/home/george/Agrovet/src/Agrovet.Application/bin/Debug/net8.0/Agrovet.Domain.pdb
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.csproj.AssemblyReference.cache
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.AssemblyInfoInputs.cache
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.AssemblyInfo.cs
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.csproj.CoreCompileInputs.cache
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.csproj.CopyComplete
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.dll
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/refint/Agrovet.Application.dll
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.pdb
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/ref/Agrovet.Application.dll
