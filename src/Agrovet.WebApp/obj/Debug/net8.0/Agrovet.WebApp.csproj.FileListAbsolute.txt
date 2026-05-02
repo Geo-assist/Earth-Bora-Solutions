@@ -1034,3 +1034,4 @@
 /home/george/Agrovet/src/Agrovet.WebApp/obj/Debug/net8.0/compressed/zfjpgwj1bt.gz
 /home/george/Agrovet/src/Agrovet.WebApp/obj/Debug/net8.0/compressed/ty38ywrqhj.gz
 /home/george/Agrovet/src/Agrovet.WebApp/obj/Debug/net8.0/compressed/ywb0qz1iy5.gz
+/home/george/Agrovet/src/Agrovet.WebApp/obj/Debug/net8.0/Agrovet.WebApp.sourcelink.json

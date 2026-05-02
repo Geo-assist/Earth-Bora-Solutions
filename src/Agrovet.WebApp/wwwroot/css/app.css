@@ -9,6 +9,57 @@ html, body {
     background: #f5f6fa;
 }
 
+/* Mobile responsive grid fixes */
+@@media (max-width: 768px) {
+    /* Products page sidebar */
+    .products-layout {
+        flex-direction: column !important;
+    }
+
+    /* Cart and Checkout grid */
+    .checkout-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /*Login/Register split layout */
+    .split-layout {
+        flex-direction: column !important;
+    }
+
+    .split-layout .image-side {
+        display: none !important;
+    }
+
+    .split-layout .form-side {
+        width: 100% !important;
+        padding: 24px 16px !important;
+    }
+
+    /* Home hero */
+    .hero-title {
+        font-size: 2rem !important;
+    }
+
+    /* General padding fix */
+    .page-padding {
+        padding: 16px !important;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+        grid-template-columns: repeat(2. 1fr) !important;
+    }
+}
+
+@@media (max-width: 480px){
+    .hero-title {
+        font-size: 1.6rem !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

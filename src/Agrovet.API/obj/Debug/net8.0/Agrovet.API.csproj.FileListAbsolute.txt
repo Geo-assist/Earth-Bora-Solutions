@@ -148,3 +148,4 @@
 /home/george/Agrovet/src/Agrovet.API/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
 /home/george/Agrovet/src/Agrovet.API/bin/Debug/net8.0/BCrypt.Net-Next.dll
 /home/george/Agrovet/src/Agrovet.API/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/george/Agrovet/src/Agrovet.API/obj/Debug/net8.0/Agrovet.API.sourcelink.json

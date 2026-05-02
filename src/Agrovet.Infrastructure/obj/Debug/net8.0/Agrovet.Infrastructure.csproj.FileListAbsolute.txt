@@ -17,3 +17,4 @@
 /home/george/Agrovet/src/Agrovet.Infrastructure/obj/Debug/net8.0/ref/Agrovet.Infrastructure.dll
 /home/george/Agrovet/src/Agrovet.Infrastructure/bin/Debug/net8.0/Agrovet.Infrastructure.runtimeconfig.json
 /home/george/Agrovet/src/Agrovet.Infrastructure/obj/Debug/net8.0/Agrovet.Infrastructure.genruntimeconfig.cache
+/home/george/Agrovet/src/Agrovet.Infrastructure/obj/Debug/net8.0/Agrovet.Infrastructure.sourcelink.json

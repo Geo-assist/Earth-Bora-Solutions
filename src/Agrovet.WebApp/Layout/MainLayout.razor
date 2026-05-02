@@ -7,7 +7,7 @@
     <!-- Top Navbar -->
     <nav style="
         background: #1b5e20;
-        padding: 0 40px;
+        padding: 0 24px;
         height: 65px;
         display: flex;
         align-items: center;
@@ -18,13 +18,13 @@
         z-index: 1000;
     ">
         <!-- Logo -->
-        <div @onclick="@(() => Navigation.NavigateTo("/"))" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.6rem;">🌿</span>
-            <span style="color: white; font-size: 1.3rem; font-weight: 900; letter-spacing: 1px;">EARTH BORA SOLUTIONS</span>
+        <div @onclick="@(() => {Navigation.NavigateTo("/"); menuOpen = false;})" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">🌿</span>
+            <span style="color: white; font-size: 1rem; font-weight: 900; letter-spacing: 0.5px;">EARTH BORA SOLUTIONS</span>
         </div>
 
-        <!-- Nav Links -->
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <!-- Desktop Nav Links -->
+        <div class = "desktop-nav" style="display: flex; align-items: center; gap: 8px;">
             @if (AuthState.IsLoggedIn)
             {
                 <button @onclick="@(() => Navigation.NavigateTo("/"))" style="@NavBtnStyle">
@@ -49,7 +49,7 @@
                     color: white;
                     padding: 6px 14px;
                     border-radius: 50px;
-                    font-size: 0.85rem;
+                    font-size: 0.82rem;
                     font-weight: 600;
                 ">
                     👤 @AuthState.FullName
@@ -60,7 +60,7 @@
                     border: 1px solid rgba(255,80,80,0.4);
                     padding: 8px 18px;
                     border-radius: 50px;
-                    font-size: 0.85rem;
+                    font-size: 0.82rem;
                     font-weight: 600;
                     cursor: pointer;
                 ">
@@ -81,7 +81,7 @@
                     border: none;
                     padding: 10px 22px;
                     border-radius: 50px;
-                    font-size: 0.9rem;
+                    font-size: 0.88rem;
                     font-weight: 700;
                     cursor: pointer;
                     box-shadow: 0 2px 8px rgba(76,175,80,0.4);
@@ -90,7 +90,79 @@
                 </button>
             }
         </div>
+        <!-- Hamburger Button (mobile only) -->
+        <button @onclick="ToggleMenu" class="hamburger-btn" style="
+        display: none;
+        background: transparent;
+        border : none;
+        cursor : pointer;
+        padding : 8px;
+        flex-direction : column;
+        gap : 5px;
+        ">
+        <span style="display: block; width: 24px; height: 2px; background: white; border-radius: 2px;"></span>
+        <span style="display: block; width: 24px; height: 2px; background: white; border-radius:2px;"></span> 
+        <span style="display: block; width: 24px; height: 2px; background: white; border-radius: 2px;"></span>
+        </button>
     </nav>
+
+    <!--Mobile Menu Dropdown -->
+    @if (menuOpen)
+    {
+        <div style="
+        background: #1b5e20;
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        position: sticky;
+        top: 65px;
+        z-index: 999;
+        ">
+               @if (AuthState.IsLoggedIn)
+               {
+                   <div style="color: rgba(255,255,255,0.7); font-size:0.78rem; padding: 8px 12px; margin-bottom: 4px;">
+                               @AuthState.FullName
+                   </div>
+                   <button @onclick="@(() => NavTo("/"))" style="@MobileNavBtnStyle"> Home</button>
+                   <button @onclick="@(() => NavTo("/products"))" style="@MobileNavBtnStyle"> Products</button>
+                   <button @onclick="@(() => NavTo("/cart"))" style="@MobileNavBtnStyle"> Cart</button>
+                   <button @onclick="@(() => NavTo("/orders"))" style="@MobileNavBtnStyle"> My Orders </button>
+                   <button @onclick="MobileLogout" style="
+                   background: rgba(255,80,80,0.2);
+                   color: white;
+                   border: 1px solid rgba(255,80,80,0.4);
+                   padding: 12px 16px;
+                   border-radius: 10px;
+                   font-size: 0.9rem;
+                   font-weight: 600;
+                   cursor: pointer;
+                   text-align: left;
+                   margin-top: 8px;
+                   ">Logout</button>
+                   }
+                   else
+                   {
+                    <button @onclick="@(() => NavTo("/"))" style="@MobileNavBtnStyle">Home</button>
+                    <button @onclick="@(() => NavTo("/login"))" style="@MobileNavBtnStyle">Login</button>
+                    <button @onclick="@(() => NavTo("/register"))" styles="
+                        background: #4caf50;
+                        color: white;
+                        border: none;
+                        padding: 12px 16px;
+                        border-radius: 10px;
+                        font-size: 0.9rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        text-align: left;
+                        margin-top: 4px;
+                        ">Get Started</button>
+                    }                   }
+                   </div>
+
+                }
+    }
 
     <!-- Page Content -->
     <div style="width: 100%;">
@@ -98,11 +170,39 @@
     </div>
 </div>
 
-@code {
-    private string NavBtnStyle => "background: transparent; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer;";
+<style>
+    @@media (max-width: 768px) {
+        .desktop-nav {
+            dispaly: none !important;
+        }
+        .hamburger-btn {
+            display: flex !important;
+        }
+    }
+</style>
 
-    private void Logout()
+@code {
+    private bool menuOpen = false;
+
+    private string NavBtnStyle => "background: transparent; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer;";
+    private string MobileNavBtnStyle => "background: rgba(255,255,255,0.1); color: white; border: none; padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: left;";
+    
+    private void ToggleMenu() => menuOpen = !menuOpen;
+
+    private void NavTo(string url)
     {
+        menuOpen = false;
+        Navigation.NavigateTo(url);
+    }
+        private void Logout()
+    {
+        AuthState.Logout();
+        Navigation.NavigateTo("/login");
+    }
+
+    private void MobileLogout()
+    {
+        menuOpen = false;
         AuthState.Logout();
         Navigation.NavigateTo("/login");
     }

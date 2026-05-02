@@ -9,3 +9,4 @@
 /home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/refint/Agrovet.Domain.dll
 /home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.pdb
 /home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/ref/Agrovet.Domain.dll
+/home/george/Agrovet/src/Agrovet.Domain/obj/Debug/net8.0/Agrovet.Domain.sourcelink.json

@@ -13,3 +13,4 @@
 /home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/refint/Agrovet.Application.dll
 /home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.pdb
 /home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/ref/Agrovet.Application.dll
+/home/george/Agrovet/src/Agrovet.Application/obj/Debug/net8.0/Agrovet.Application.sourcelink.json
