@@ -61,9 +61,16 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+            "http://localhost:5000",
+            "http://localhost:5167",
+            "https://earth-bora-solutions-webapp.netlify.app",
+            "https://earth-bora-solution-adminapp.netlify.app")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        
+              
+              
     });
 });
 
@@ -76,8 +83,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
-app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("ngrok-skip-browser-warning", "true");
+    await next();
+});
 app.MapControllers();
 app.Run();

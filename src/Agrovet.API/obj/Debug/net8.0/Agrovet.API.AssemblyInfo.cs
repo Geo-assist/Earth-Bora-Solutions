@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Agrovet.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96bba4a4fe17f6e0020d658acbacd884a0a5dd73")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1c619442ccf96a9c2a56644387bc89fc33584da")]
 [assembly: System.Reflection.AssemblyProductAttribute("Agrovet.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Agrovet.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

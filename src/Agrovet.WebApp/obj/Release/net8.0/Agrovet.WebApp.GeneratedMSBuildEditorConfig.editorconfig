@@ -1,0 +1,71 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = Agrovet.WebApp
+build_property.RootNamespace = Agrovet.WebApp
+build_property.ProjectDir = /home/george/Agrovet/src/Agrovet.WebApp/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/george/Agrovet/src/Agrovet.WebApp
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Cart.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2FydC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Checkout.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2hlY2tvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/ForgotPassword.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRm9yZ290UGFzc3dvcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Orders.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvT3JkZXJzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Products.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUHJvZHVjdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Pages/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVnaXN0ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0L01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ponc5vt152
+
+[/home/george/Agrovet/src/Agrovet.WebApp/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0L05hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-sl9o776zjs

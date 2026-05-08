@@ -7,9 +7,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddScoped(sp => 
 {
-    BaseAddress = new Uri("http://localhost:5161/")
+    var client = new HttpClient {BaseAddress = new Uri("https://altha-proexpert-elliana.ngrok-free.dev/")};
+    client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+    return client;
 });
 
 builder.Services.AddSingleton<AuthStateService>();

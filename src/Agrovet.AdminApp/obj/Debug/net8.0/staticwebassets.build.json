@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TVOpPBgajbfQq9XS6hwdmkxo8I0a6zvaQNZegInm5tA=",
+  "Hash": "n8UvNWfMfQEaySgeJ+iN1tTlD/36HzyG8aRUeTMezcQ=",
   "Source": "Agrovet.AdminApp",
   "BasePath": "/",
   "Mode": "Root",
@@ -109,7 +109,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.js"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js.map",
@@ -128,15 +128,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.js.map"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.js.map"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.25.lx20pvss6x.js",
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.26.btgyei82bf.js",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
       "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
       "BasePath": "/",
-      "RelativePath": "_framework/dotnet.native.8.0.25.lx20pvss6x.js",
+      "RelativePath": "_framework/dotnet.native.8.0.26.btgyei82bf.js",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -147,7 +147,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.native.js"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.native.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.wasm",
@@ -166,15 +166,15 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.native.wasm"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.native.wasm"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.25.gsvethlp0y.js",
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.26.h9jpo3i6ur.js",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
       "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
       "BasePath": "/",
-      "RelativePath": "_framework/dotnet.runtime.8.0.25.gsvethlp0y.js",
+      "RelativePath": "_framework/dotnet.runtime.8.0.26.h9jpo3i6ur.js",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -185,7 +185,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.runtime.js"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.runtime.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.js.map",
@@ -204,7 +204,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/dotnet.runtime.js.map"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/dotnet.runtime.js.map"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_CJK.dat",
@@ -223,7 +223,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/icudt_CJK.dat"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/icudt_CJK.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_EFIGS.dat",
@@ -242,7 +242,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/icudt_EFIGS.dat"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/icudt_EFIGS.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_no_CJK.dat",
@@ -261,7 +261,7 @@
       "AssetTraitValue": "native",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/runtimes/browser-wasm/native/icudt_no_CJK.dat"
+      "OriginalItemSpec": "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/runtimes/browser-wasm/native/icudt_no_CJK.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/Microsoft.AspNetCore.Authorization.wasm",
@@ -4254,25 +4254,6 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/Microsoft.Extensions.Primitives.wasm"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/3z9r729jh3.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.runtime.js.map.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.js.map",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.js.map"
-    },
-    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/4bdsap3z1q.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -4366,25 +4347,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.ObjectModel.wasm"
-    },
-    {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/5dq9t5ps4o.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.js.map.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js.map",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js.map"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/5h4vjh1x72.gz",
@@ -5128,6 +5090,25 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Windows.wasm"
     },
     {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/btgyei82bf.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.native.8.0.26.btgyei82bf.js.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.26.btgyei82bf.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.26.btgyei82bf.js"
+    },
+    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/btvqa2ecl7.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -5413,6 +5394,25 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Transactions.Local.wasm"
     },
     {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/dctru0mzeq.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/icudt_no_CJK.dat.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_no_CJK.dat",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_no_CJK.dat"
+    },
+    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/df3kplkn3w.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -5506,6 +5506,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.IO.Compression.wasm"
+    },
+    {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/e2kmd0nnuw.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/icudt_CJK.dat.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_CJK.dat",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_CJK.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/e4xzvb4tee.gz",
@@ -5641,25 +5660,6 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Numerics.wasm"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/fy0ngtf0f8.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.native.wasm.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.wasm",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.wasm"
-    },
-    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/gcy5r8deos.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -5677,25 +5677,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Diagnostics.StackTrace.wasm"
-    },
-    {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/gsvethlp0y.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.runtime.8.0.25.gsvethlp0y.js.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.25.gsvethlp0y.js",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.25.gsvethlp0y.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/gyhmtea5j7.gz",
@@ -5736,6 +5717,25 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Net.WebSockets.wasm"
     },
     {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/h6l98aadek.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.runtime.js.map.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.js.map",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.js.map"
+    },
+    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/h6lzbyn93p.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -5753,6 +5753,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/Microsoft.Extensions.Logging.Abstractions.wasm"
+    },
+    {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/h9jpo3i6ur.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.runtime.8.0.26.h9jpo3i6ur.js.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.26.h9jpo3i6ur.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.runtime.8.0.26.h9jpo3i6ur.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/hmte1axybu.gz",
@@ -6190,25 +6209,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Net.NetworkInformation.wasm"
-    },
-    {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/lx20pvss6x.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.native.8.0.25.lx20pvss6x.js.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.25.lx20pvss6x.js",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.8.0.25.lx20pvss6x.js"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/mc9jvwhnn3.gz",
@@ -6876,6 +6876,25 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.IO.UnmanagedMemoryStream.wasm"
     },
     {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/rv09lpzb6o.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.js.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js"
+    },
+    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/rxspbls1k8.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -6893,6 +6912,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Threading.wasm"
+    },
+    {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/rxtccuw8l6.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/icudt_EFIGS.dat.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_EFIGS.dat",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_EFIGS.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/sfru5hrqrk.gz",
@@ -7045,25 +7083,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Net.Security.wasm"
-    },
-    {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/ty38ywrqhj.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/icudt_EFIGS.dat.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_EFIGS.dat",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_EFIGS.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/u0pyihkdqv.gz",
@@ -7294,6 +7313,25 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.ComponentModel.Annotations.wasm"
     },
     {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/vj7gjwngzp.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.js.map.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js.map",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js.map"
+    },
+    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/voyrkzi6k0.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -7406,6 +7444,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Dynamic.Runtime.wasm"
+    },
+    {
+      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/wrad0fjdqd.gz",
+      "SourceId": "Agrovet.AdminApp",
+      "SourceType": "Computed",
+      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "_framework/dotnet.native.wasm.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.wasm",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.native.wasm"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/wvgt6r5ios.gz",
@@ -7560,25 +7617,6 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.wasm"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/y9mb950caq.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/dotnet.js.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/dotnet.js"
-    },
-    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/ycknu1j7he.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -7636,25 +7674,6 @@
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Transactions.wasm"
     },
     {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/ywb0qz1iy5.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/icudt_no_CJK.dat.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_no_CJK.dat",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_no_CJK.dat"
-    },
-    {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/yyo2yqto2w.gz",
       "SourceId": "Agrovet.AdminApp",
       "SourceType": "Computed",
@@ -7672,25 +7691,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/System.Runtime.InteropServices.JavaScript.wasm"
-    },
-    {
-      "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/zfjpgwj1bt.gz",
-      "SourceId": "Agrovet.AdminApp",
-      "SourceType": "Computed",
-      "ContentRoot": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "_framework/icudt_CJK.dat.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_CJK.dat",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "/home/george/Agrovet/src/Agrovet.AdminApp/bin/Debug/net8.0/wwwroot/_framework/icudt_CJK.dat"
     },
     {
       "Identity": "/home/george/Agrovet/src/Agrovet.AdminApp/obj/Debug/net8.0/compressed/zsssxboe2p.gz",

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VMSrBdsmGxrdStnvqgwtM2zkuSfKva5LsBHfoL+AcvQiA0DzNSqRzq5jDK3CYYDmdQnF+0K4GXnWNDtx+3YAqQ==",
+  "dgSpecHash": "XiERbRAQxaA7yHxfxEo2PLA5ZtxIp5VxCd00m6ClEk/xLXSqcDUhIGZ4QsEjQSV65ebiug2yMHSYBHKw7Du39w==",
   "success": true,
   "projectFilePath": "/home/george/Agrovet/src/Agrovet.AdminApp/Agrovet.AdminApp.csproj",
   "expectedPackageFiles": [
@@ -28,10 +28,10 @@
     "/home/george/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "/home/george/.nuget/packages/microsoft.jsinterop/8.0.24/microsoft.jsinterop.8.0.24.nupkg.sha512",
     "/home/george/.nuget/packages/microsoft.jsinterop.webassembly/8.0.24/microsoft.jsinterop.webassembly.8.0.24.nupkg.sha512",
-    "/home/george/.nuget/packages/microsoft.net.illink.tasks/8.0.25/microsoft.net.illink.tasks.8.0.25.nupkg.sha512",
-    "/home/george/.nuget/packages/microsoft.net.sdk.webassembly.pack/8.0.25/microsoft.net.sdk.webassembly.pack.8.0.25.nupkg.sha512",
+    "/home/george/.nuget/packages/microsoft.net.illink.tasks/8.0.26/microsoft.net.illink.tasks.8.0.26.nupkg.sha512",
+    "/home/george/.nuget/packages/microsoft.net.sdk.webassembly.pack/8.0.26/microsoft.net.sdk.webassembly.pack.8.0.26.nupkg.sha512",
     "/home/george/.nuget/packages/system.io.pipelines/8.0.0/system.io.pipelines.8.0.0.nupkg.sha512",
-    "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.25/microsoft.netcore.app.runtime.mono.browser-wasm.8.0.25.nupkg.sha512"
+    "/home/george/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/8.0.26/microsoft.netcore.app.runtime.mono.browser-wasm.8.0.26.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,0 +1,61 @@
+{
+  "Files": [
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/bin/Release/net8.0/wwwroot/_framework/blazor.webassembly.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/obj/Release/net8.0/compressed/0vuw54fogc.gz",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/obj/Release/net8.0/scopedcss/bundle/Agrovet.WebApp.styles.css",
+      "PackagePath": "staticwebassets/Agrovet.WebApp.styles.css"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/icon-192.png",
+      "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/home/george/Agrovet/src/Agrovet.WebApp/wwwroot/sample-data/weather.json",
+      "PackagePath": "staticwebassets/sample-data/weather.json"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.Agrovet.WebApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.build.Agrovet.WebApp.props",
+      "PackagePath": "build\\Agrovet.WebApp.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.buildMultiTargeting.Agrovet.WebApp.props",
+      "PackagePath": "buildMultiTargeting\\Agrovet.WebApp.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.buildTransitive.Agrovet.WebApp.props",
+      "PackagePath": "buildTransitive\\Agrovet.WebApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
