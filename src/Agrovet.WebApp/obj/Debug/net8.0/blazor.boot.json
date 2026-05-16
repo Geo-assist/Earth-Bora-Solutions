@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Agrovet.WebApp",
   "resources": {
-    "hash": "sha256-tpxECkRPPfjhJ2zOvUypTGGmgzwDkJ1H1VJVkqZk6Mc=",
+    "hash": "sha256-rX7cRh0bmxmZu/6BcJbHMw+dC6DRbL/mOZOB8A0W/VI=",
     "jsModuleNative": {
       "dotnet.native.8.0.26.btgyei82bf.js": "sha256-nElGk+CZFyq0PbPm4JU8avD6lER7x9Z1C54BK7qY12Q="
     },
@@ -209,10 +209,10 @@
       "mscorlib.wasm": "sha256-UzRTTeY8BezBltrUF59UgvVNxbmnZS3LeowarsPY8+Y=",
       "netstandard.wasm": "sha256-xHQSNwqHm8E9DM86qW7CTJoRXXsQuGmPeNipDwQFNr8=",
       "System.Private.CoreLib.wasm": "sha256-N9/Djwpe2mX4HdyhCGu9jrxG/DSYKoTPbtsIOv6VFDk=",
-      "Agrovet.WebApp.wasm": "sha256-eSgCQgBX8z1K/E34AftH+zyNxU6ABlvmiuT+VsmeiEc="
+      "Agrovet.WebApp.wasm": "sha256-MRn2j4h/hcquUZl4dKVQiEVna4alpAHiamVQq2oYBgY="
     },
     "pdb": {
-      "Agrovet.WebApp.pdb": "sha256-Jeq/2S/k72N0s+SCwi2ev5E22glvR9u+iGU9SFLA9I8="
+      "Agrovet.WebApp.pdb": "sha256-YN+ZbQx23WjrL7sAhnuJEsZYTmpnV3AHvYRJVw2Zjm8="
     }
   },
   "cacheBootResources": true,

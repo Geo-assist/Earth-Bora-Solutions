@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Agrovet.WebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1c619442ccf96a9c2a56644387bc89fc33584da")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7106b11ef48b45f6b5e9dfa9431d44d5eb5ffde8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Agrovet.WebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Agrovet.WebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
